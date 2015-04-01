@@ -3,11 +3,11 @@ class Car(object):
 
     xCoord = 0
     yCoord = 0
-    lenght = 1
+    length = 1
     direction = 1 # 0 for vertical, 1 for horizontal
     color = ''
 
-    def __init__(self, xCoord, yCoord, lenght, direction, color="yellow"):
+    def __init__(self, xCoord, yCoord, length, direction, color="yellow"):
         return None
 
     def getXCoord(self):
@@ -16,8 +16,8 @@ class Car(object):
     def getYCoord(self):
         return self.yCoord
 
-    def getLenght(self):
-        return self.lenght
+    def getLength(self):
+        return self.length
 
     def getDirection(self):
         return self.direction
