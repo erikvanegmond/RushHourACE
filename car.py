@@ -5,6 +5,7 @@ class Car(object):
     yCoord = 0
     lenght = 1
     direction = 1 # 0 for vertical, 1 for horizontal
+    color = ''
 
     def __init__(self, xCoord, yCoord, lenght, direction, color="yellow"):
         return None
@@ -13,13 +14,16 @@ class Car(object):
         return self.xCoord
 
     def getYCoord(self):
-        pass
+        return self.yCoord
 
     def getLenght(self):
-        pass
+        return self.lenght
 
     def getDirection(self):
-        pass
+        return self.direction
+
+    def setColor(self, color):
+        self.color = color
 
     def move(self, distance):
         pass
