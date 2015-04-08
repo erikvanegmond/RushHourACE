@@ -100,6 +100,14 @@ class Game(object):
         self.board.addCar((4,4),2,1, 5)
         self.board.addCar((4,5),2,1, 2)
 
+    def loadTestGame1(self):
+        self.board.addCar((0,2),2,1, 0)
+        self.board.addCar((4,2),2,0, 4)
+
+    def loadTestGame2(self):
+        self.board.addCar((0,2),2,1, 0)
+        self.board.addCar((4,2),3,0, 2)
+        self.board.addCar((3,5),2,1, 4)
 
 if __name__ == '__main__':
     Game()
