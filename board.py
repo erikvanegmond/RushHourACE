@@ -96,6 +96,20 @@ class Board():
     def getExitCoord(self):
         return self.exitCoord
 
+    def checkRedCar(self):
+        for car in self.cars:
+            if car.getColor() == 0 and car.getLength() == 2:
+                # 2 is y coord of exit
+                if car.getYCoord() == self.exitYCoord and car.getDirection() == 1:
+                    print 'Correct configuration red car'
+                    return True
+                else:
+                    print 'Error: Unsolvable puzzle'
+                    return False
+            else:
+                print 'Error: Incorrect configuration red car'
+                return False
+
     def addNumbers(self, car):
         coords = car.getCoords()
         direction = car.getDirection()
