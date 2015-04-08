@@ -46,7 +46,10 @@ class Game(object):
                         self.quitGame()
 
                 self.screen.drawScreen(self.board)
-                self.move()
+
+                if not self.board.checkForWin():
+                    self.move()
+        
                 # print self.board.printGrid()
                 # Update the screen
                 pygame.display.update()

@@ -8,7 +8,7 @@ class Board():
 
     exitXCoord = 5
     exitYCoord = 2
-    exitCoords = (exitXCoord, exitYCoord)
+    exitCoord = (exitXCoord, exitYCoord)
 
     cars = []
     numCars = 1
@@ -109,6 +109,13 @@ class Board():
             else:
                 print 'Error: Incorrect configuration red car'
                 return False
+
+    def checkForWin(self):
+        for car in self.cars:
+            if car.getColor() == 0 and car.getXCoord() + car.getLength() - 1 == self.exitXCoord:
+                print 'Game won!'
+                return True
+        return False
 
     def addNumbers(self, car):
         coords = car.getCoords()
