@@ -6,7 +6,9 @@ class Board():
     width = 6
     height = 6
 
-    exitCoords = (6,3) # (xCoord, yCoord)
+    exitXCoord = 5
+    exitYCoord = 2
+    exitCoords = (exitXCoord, exitYCoord)
 
     cars = []
     numCars = 1
@@ -90,6 +92,9 @@ class Board():
 
     def setExitCoord(self, exitCoord):
         self.exitCoord = exitCoord
+
+    def getExitCoord(self):
+        return self.exitCoord
 
     def addNumbers(self, car):
         coords = car.getCoords()
