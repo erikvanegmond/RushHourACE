@@ -5,7 +5,6 @@ from pygame.locals import *
 import random
 
 
-
 class Game(object):
 
     board = None
@@ -20,7 +19,7 @@ class Game(object):
         pygame.init()
         self.board = Board()
 
-        self.loadGame2()
+        self.loadGame1()
         self.board.setCarsMovable()
 
         print self.board.printGrid()
@@ -76,25 +75,25 @@ class Game(object):
 
 
 
-
     def loadGame1(self):
+        self.board.addCar((3,2),2,1, 0, True)
         self.board.addCar((2,0),3,0, 9)
         self.board.addCar((3,0),2,1, 7)
         self.board.addCar((5,0),3,0, 2)
-        self.board.addCar((3,2),2,1, 0)
         self.board.addCar((3,3),3,0, 1)
         self.board.addCar((4,3),2,1, 3)
         self.board.addCar((0,4),2,0, 1)
         self.board.addCar((1,4),2,1, 7)
         self.board.addCar((4,5),2,1, 5)
 
+
     def loadGame2(self):
+        self.board.addCar((2,2),2,1, 0, True)
         self.board.addCar((2,0),2,1, 8)
         self.board.addCar((4,0),2,1, 1)
         self.board.addCar((1,1),2,1, 1)
         self.board.addCar((3,1),2,1, 5)
         self.board.addCar((5,1),3,0, 2)
-        self.board.addCar((2,2),2,1, 0)
         self.board.addCar((4,2),2,0, 6)
         self.board.addCar((0,3),2,1, 5)
         self.board.addCar((2,3),2,1, 8)
@@ -104,11 +103,11 @@ class Game(object):
         self.board.addCar((4,5),2,1, 2)
 
     def loadTestGame1(self):
-        self.board.addCar((0,2),2,1, 0)
+        self.board.addCar((0,2),2,1, 0, True)
         self.board.addCar((4,2),2,0, 4)
 
     def loadTestGame2(self):
-        self.board.addCar((0,2),2,1, 0)
+        self.board.addCar((0,2),2,1, 0, True)
         self.board.addCar((4,2),3,0, 2)
         self.board.addCar((3,5),2,1, 4)
 
