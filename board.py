@@ -63,7 +63,7 @@ class Board():
                 return
         car.setCanMove(False)
 
-    def carCanMoveForeward(self, car):
+    def carCanMoveForward(self, car):
         coords = car.getCoords()
         direction = car.getDirection()
         lenght = car.getLength()

@@ -2,7 +2,7 @@ import pygame, sys
 from board import *
 import screen as sc
 from pygame.locals import *
-
+import random
 
 
 
@@ -28,7 +28,7 @@ class Game(object):
         self.screen = sc.Screen(self.windowWidth, self.windowHeight)
 
         self.last = pygame.time.get_ticks()
-        self.msPerStep = 500
+        self.msPerStep = 1
 
         self.runGame()
 
@@ -53,13 +53,18 @@ class Game(object):
 
 
     def move(self):
+        movableCars = []
         for car in self.board.getCars():
-            if car.getCanMove() and self.board.carCanMoveBackward(car):
-                self.board.addZeros(car)
-                car.move(-1)
-                self.board.addNumbers(car)
-                self.board.setCarsMovable()
-                break
+            if car.getCanMove():
+                movableCars.append( car )
+
+        car = movableCars[random.randint(0,len(movableCars)-1)]
+        direction = 1 if random.random()>0.5 else -1
+        if car.getCanMove() and ((direction == -1 and self.board.carCanMoveBackward(car)) or (direction == 1 and self.board.carCanMoveForward(car))):
+            self.board.addZeros(car)
+            car.move(direction)
+            self.board.addNumbers(car)
+            self.board.setCarsMovable()
 
     # Quit the game
     def quitGame(self):
