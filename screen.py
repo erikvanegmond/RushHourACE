@@ -112,6 +112,8 @@ class Screen(object):
         for i in range(0,y):
             pygame.draw.line(self.screen, self.BLACK, (0, i * self.gridHeight), (x * self.gridWidth, i*self.gridHeight))
 
+        self.drawExit(board)
+
     # Darkens the inputted color and returns the result.
     def darkenColor(self, color):
         darkenFactor = 0.3
@@ -120,3 +122,14 @@ class Screen(object):
                     int(color[2]*darkenFactor)
                    )
         return newColor
+
+    def drawExit(self, board):
+        exit = board.getExitCoord()
+        xStart = exit[0] * self.gridWidth + 0.75 * self.gridWidth
+        yStart = exit[1] * self.gridHeight 
+
+        width = self.gridWidth / 4
+        height = self.gridHeight
+
+        door = pygame.Rect(xStart, yStart, width, height)
+        pygame.draw.rect(self.screen, (200, 200, 200), door)
