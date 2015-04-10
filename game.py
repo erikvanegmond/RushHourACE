@@ -19,7 +19,7 @@ class Game(object):
         pygame.init()
         self.board = Board()
 
-        self.loadGame1()
+        self.loadGame2()
         self.board.setCarsMovable()
 
         print self.board.printGrid()
@@ -48,7 +48,7 @@ class Game(object):
 
                 if not self.board.checkForWin():
                     self.move()
-        
+
                 # print self.board.printGrid()
                 # Update the screen
                 pygame.display.update()
