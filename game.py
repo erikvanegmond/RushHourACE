@@ -53,7 +53,7 @@ class Game(object):
                 # Update the screen
                 pygame.display.update()
 
-    # make this 'newState' function??
+
     def move(self):
         movableCars = []
         for car in self.board.getCars():
@@ -62,7 +62,7 @@ class Game(object):
 
         car = movableCars[random.randint(0,len(movableCars)-1)]
         direction = 1 if random.random()>0.5 else -1
-        if car.getCanMove() and ((direction == -1 and self.board.carCanMoveBackward(car) > 0) or (direction == 1 and self.board.carCanMoveForward(car) > 0)):
+        if car.getCanMove() and ((direction == -1 and self.board.carCanMoveBackward(car)) > 0 or (direction == 1 and self.board.carCanMoveForward(car) > 0)):
             self.board.addZeros(car)
             car.move(direction)
             self.board.addNumbers(car)

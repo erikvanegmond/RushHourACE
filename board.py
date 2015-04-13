@@ -68,6 +68,7 @@ class Board():
             if (coords[1]-1 >= 0 and not self.grid[coords[1]-1][coords[0]]) or (coords[1]+length < self.height and not self.grid[coords[1]+length][coords[0]]):
                 car.setCanMove(True)
                 return
+
         car.setCanMove(False)
 
     def carCanMoveForward(self, car):
@@ -88,8 +89,8 @@ class Board():
     def carCanMoveBackward(self, car):
         coords = car.getCoords()
         direction = car.getDirection()
-        length = car.getLength()
         steps = 0
+        # length = car.getLength() > unused?
 
         while car.getCanMove():
             if direction:
