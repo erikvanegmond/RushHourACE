@@ -6,10 +6,14 @@ class Board():
     width = 6
     height = 6
 
-    exitCoords = (6,3) # (xCoord, yCoord)
+    exitXCoord = 5
+    exitYCoord = 2
+    exitCoord = (exitXCoord, exitYCoord)
 
     cars = []
     numCars = 1
+
+    winCarID = 0
 
     grid = [[0 for x in range(width)] for x in range(height)]
 
@@ -25,12 +29,14 @@ class Board():
     def getCars(self):
         return self.cars
 
-    def addCar(self, coords, lenght, direction, color=0):
+    def addCar(self, coords, length, direction, color=0, isWinCar=False):
         carID = self.numCars
-        car = Car(coords[0], coords[1], lenght, direction, carID, color)
+        car = Car(coords[0], coords[1], length, direction, carID, color)
         if self.roomForACar(car):
             self.cars.append(car)
             self.addNumbers(car)
+            if isWinCar:
+                self.setWinCarID(carID)
             self.numCars += 1
         else:
             print "can not add this car!"
@@ -38,9 +44,9 @@ class Board():
     def roomForACar(self, car):
         coords = car.getCoords()
         direction = car.getDirection()
-        lenght = car.getLength()
+        length = car.getLength()
 
-        for i in range(0,lenght):
+        for i in range(0,length):
             if (direction and self.grid[coords[1]][coords[0]+i]) or (not direction and self.grid[coords[1]+i][coords[0]]):
                 return False
         return True
@@ -52,44 +58,65 @@ class Board():
     def setCarMovable(self, car):
         coords = car.getCoords()
         direction = car.getDirection()
-        lenght = car.getLength()
+        length = car.getLength()
+
         if direction:
-            if (coords[0]-1 >= 0 and not self.grid[coords[1]][coords[0]-1]) or (coords[0]+lenght < self.width and not self.grid[coords[1]][coords[0]+lenght]):
+            if (coords[0]-1 >= 0 and not self.grid[coords[1]][coords[0]-1]) or (coords[0]+length < self.width and not self.grid[coords[1]][coords[0]+length]):
                 car.setCanMove(True)
                 return
         else:
-            if (coords[1]-1 >= 0 and not self.grid[coords[1]-1][coords[0]]) or (coords[1]+lenght < self.height and not self.grid[coords[1]+lenght][coords[0]]):
+            if (coords[1]-1 >= 0 and not self.grid[coords[1]-1][coords[0]]) or (coords[1]+length < self.height and not self.grid[coords[1]+length][coords[0]]):
                 car.setCanMove(True)
                 return
+
         car.setCanMove(False)
 
-    def carCanMoveForeward(self, car):
+    def carCanMoveForward(self, car):
         coords = car.getCoords()
         direction = car.getDirection()
-        lenght = car.getLength()
-        if direction:
-            if (coords[0]+lenght < self.width and not self.grid[coords[1]][coords[0]+lenght]):
-                return True
-        else:
-            if (coords[1]+lenght < self.height and not self.grid[coords[1]+lenght][coords[0]]):
-                return True
-        return False
+        length = car.getLength()
+        steps = 0
+
+        while car.getCanMove():
+            if direction:
+                if (coords[0]+length < self.width and not self.grid[coords[1]][coords[0]+length]):
+                    steps += 1
+            else:
+                if (coords[1]+length < self.height and not self.grid[coords[1]+length][coords[0]]):
+                    steps += 1
+        return steps
 
     def carCanMoveBackward(self, car):
         coords = car.getCoords()
         direction = car.getDirection()
-        lenght = car.getLength()
-        if direction:
-            if (coords[0]-1 >= 0 and not self.grid[coords[1]][coords[0]-1]):
-                return True
-        else:
-            if (coords[1]-1 >= 0 and not self.grid[coords[1]-1][coords[0]]):
-                return True
-        return False
+        steps = 0
+        # length = car.getLength() > unused?
+
+        while car.getCanMove():
+            if direction:
+                if (coords[0]-1 >= 0 and not self.grid[coords[1]][coords[0]-1]):
+                    steps += 1
+            else:
+                if (coords[1]-1 >= 0 and not self.grid[coords[1]-1][coords[0]]):
+                    steps += 1
+        return steps
 
 
     def setExitCoord(self, exitCoord):
         self.exitCoord = exitCoord
+
+    def getExitCoord(self):
+        return self.exitCoord
+
+    def setWinCarID(self, ID):
+        self.winCarID = ID
+
+    def checkForWin(self):
+        car = self.cars[self.winCarID - 1]
+        if car.getXCoord() + car.getLength() - 1 == self.exitXCoord:
+            print 'Game won!'
+            return True
+        return False
 
     def addNumbers(self, car):
         coords = car.getCoords()
