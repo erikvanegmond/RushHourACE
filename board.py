@@ -75,31 +75,27 @@ class Board():
         coords = car.getCoords()
         direction = car.getDirection()
         length = car.getLength()
-        steps = 0
 
-        while car.getCanMove():
-            if direction:
-                if (coords[0]+length < self.width and not self.grid[coords[1]][coords[0]+length]):
-                    steps += 1
-            else:
-                if (coords[1]+length < self.height and not self.grid[coords[1]+length][coords[0]]):
-                    steps += 1
-        return steps
+        if direction:
+            if (coords[0]+length < self.width and not self.grid[coords[1]][coords[0]+length]):
+                return True
+        else:
+            if (coords[1]+length < self.height and not self.grid[coords[1]+length][coords[0]]):
+                return True
+        return False
 
     def carCanMoveBackward(self, car):
         coords = car.getCoords()
         direction = car.getDirection()
-        steps = 0
-        # length = car.getLength() > unused?
+        length = car.getLength() > # unused?
 
-        while car.getCanMove():
-            if direction:
-                if (coords[0]-1 >= 0 and not self.grid[coords[1]][coords[0]-1]):
-                    steps += 1
-            else:
-                if (coords[1]-1 >= 0 and not self.grid[coords[1]-1][coords[0]]):
-                    steps += 1
-        return steps
+        if direction:
+            if (coords[0]-1 >= 0 and not self.grid[coords[1]][coords[0]-1]):
+                return True
+        else:
+            if (coords[1]-1 >= 0 and not self.grid[coords[1]-1][coords[0]]):
+                return True
+        return False
 
 
     def setExitCoord(self, exitCoord):
