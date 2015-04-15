@@ -13,9 +13,17 @@ class Board():
     cars = []
     numCars = 1
 
+    parent = None
+
     winCarID = 0
 
     grid = [[0 for x in range(width)] for x in range(height)]
+
+    def setParent(self, board):
+        self.parent = board
+
+    def getParent(self):
+        return self.parent
 
     def __init__(self):
         print "init board"
