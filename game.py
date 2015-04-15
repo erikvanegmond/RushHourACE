@@ -13,6 +13,8 @@ class Game(object):
     windowWidth = 300
     windowHeight = 300
 
+    visitedStates = set()
+
 
     """docstring for Game"""
     def __init__(self):
@@ -73,7 +75,11 @@ class Game(object):
         pygame.quit()
         sys.exit()
 
+    def checkVisitedStates(self, state):
+        return state in self.visitedStates        
 
+    def addVisitedStates(self, state):
+        self.visitedStates.add(state)
 
     def loadGame1(self):
         self.board.addCar((3,2),2,1, 0, True)
