@@ -87,7 +87,6 @@ class Board():
     def carCanMoveBackward(self, car):
         coords = car.getCoords()
         direction = car.getDirection()
-        length = car.getLength() > # unused?
 
         if direction:
             if (coords[0]-1 >= 0 and not self.grid[coords[1]][coords[0]-1]):
