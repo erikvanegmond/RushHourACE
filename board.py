@@ -6,9 +6,7 @@ class Board():
     width = 6
     height = 6
 
-    exitXCoord = 5
-    exitYCoord = 2
-    exitCoord = (exitXCoord, exitYCoord)
+    exitCoord = (0,0)
 
     cars = []
     numCars = 1
@@ -16,8 +14,7 @@ class Board():
     parent = None
 
     winCarID = 0
-
-    grid = [[0 for x in range(width)] for x in range(height)]
+    grid = []
 
     def setParent(self, board):
         self.parent = board
@@ -25,7 +22,10 @@ class Board():
     def getParent(self):
         return self.parent
 
-    def __init__(self):
+    def __init__(self, width = 6, height = 6):
+        self.width = width
+        self.height = height
+        self.grid = [[0 for x in range(width)] for x in range(height)]
         print "init board"
 
     def getWidth(self):
@@ -123,7 +123,7 @@ class Board():
 
     def checkForWin(self):
         car = self.cars[self.winCarID - 1]
-        if car.getXCoord() + car.getLength() - 1 == self.exitXCoord:
+        if car.getXCoord() + car.getLength() - 1 == self.exitCoord[0]:
             print 'Game won!'
             return True
         return False

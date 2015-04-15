@@ -77,6 +77,7 @@ class Screen(object):
         cars = board.getCars()
         for car in cars:
             self.drawCar(car)
+        self.drawExit(board)
 
     def drawCar(self, car):
         coords = car.getCoords()
@@ -116,8 +117,6 @@ class Screen(object):
 
         for i in range(0,y):
             pygame.draw.line(self.screen, self.BLACK, (0, i * self.gridHeight), (x * self.gridWidth, i*self.gridHeight))
-
-        self.drawExit(board)
 
     # Darkens the inputted color and returns the result.
     def darkenColor(self, color):
