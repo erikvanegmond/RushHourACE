@@ -62,6 +62,7 @@ class Game(object):
                          or (event.type == KEYUP and event.key == K_ESCAPE):
                         self.quitGame()
             self.screen.drawScreen(self.board)
+            self.screen.drawMessage("Game Won!")
             pygame.display.update()
 
 
@@ -76,7 +77,7 @@ class Game(object):
         if car.getCanMove() and ((direction == -1 and self.board.carCanMoveBackward(car)) or (direction == 1 and self.board.carCanMoveForward(car))):
             carID = car.getCarID()
             self.board.moveCarByID(carID, direction)
-            
+
             self.board.setCarsMovable()
 
 
@@ -86,7 +87,7 @@ class Game(object):
         sys.exit()
 
     def checkVisitedStates(self, state):
-        return state in self.visitedStates        
+        return state in self.visitedStates
 
     def addVisitedStates(self, state):
         self.visitedStates.add(state)

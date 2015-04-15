@@ -1,6 +1,7 @@
 import pygame, sys
 
 from pygame.locals import *
+pygame.init()
 
 class Screen(object):
     """docstring for Screen"""
@@ -11,6 +12,7 @@ class Screen(object):
 
     gridWidth = 50
     gridHeight = 50
+
 
 
     pygame.display.set_caption('RushHour')
@@ -50,6 +52,9 @@ class Screen(object):
                  10:MAGENTA,
                  11:ROSE
                 }
+
+    FONTLARGE = pygame.font.SysFont("Arial", 50)
+    FONT = pygame.font.SysFont("Arial", 20)
 
     def __init__(self, width, height):
         self.screen = pygame.display.set_mode((width, height), \
@@ -126,10 +131,21 @@ class Screen(object):
     def drawExit(self, board):
         exit = board.getExitCoord()
         xStart = exit[0] * self.gridWidth + 0.75 * self.gridWidth
-        yStart = exit[1] * self.gridHeight 
+        yStart = exit[1] * self.gridHeight
 
         width = self.gridWidth / 4
         height = self.gridHeight
 
         door = pygame.Rect(xStart, yStart, width, height)
         pygame.draw.rect(self.screen, (200, 200, 200), door)
+
+    # Draw a message.
+    def drawMessage(self, message=None):
+        if message is not None:
+            label = self.FONTLARGE.render(message, 3, self.BLACK)
+
+            # Calculate start coordinates.
+            startX = self.width/2-(label.get_width()/2)
+            startY = self.height/2
+
+            self.screen.blit(label, (startX, startY))
