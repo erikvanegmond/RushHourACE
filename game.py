@@ -3,7 +3,7 @@ from board import *
 import screen as sc
 from pygame.locals import *
 import random
-
+from Queue import *
 
 class Game(object):
 
@@ -13,6 +13,10 @@ class Game(object):
     windowWidth = 300
     windowHeight = 300
 
+    winState = False
+
+    visitedStates = set()
+    statesToVisit = Queue()
 
     """docstring for Game"""
     def __init__(self):
@@ -35,7 +39,7 @@ class Game(object):
 
     def runGame(self):
 
-        while True:
+        while not self.winState:
             now = pygame.time.get_ticks()
             if now - self.last >= self.msPerStep:
                 self.last = now
@@ -46,13 +50,21 @@ class Game(object):
                         self.quitGame()
 
                 self.screen.drawScreen(self.board)
-
-                if not self.board.checkForWin():
-                    self.move()
+                self.move()
+                self.winState = self.board.checkForWin()
 
                 # print self.board.printGrid()
                 # Update the screen
                 pygame.display.update()
+        while True:
+            for event in pygame.event.get():
+                    # Event that should close the game.
+                    if event.type == QUIT \
+                         or (event.type == KEYUP and event.key == K_ESCAPE):
+                        self.quitGame()
+            self.screen.drawScreen(self.board)
+            self.screen.drawMessage("Game Won!")
+            pygame.display.update()
 
 
     def move(self):
@@ -65,15 +77,21 @@ class Game(object):
         direction = 1 if random.random()>0.5 else -1
         if car.getCanMove() and ((direction == -1 and self.board.carCanMoveBackward(car)) or (direction == 1 and self.board.carCanMoveForward(car))):
             carID = car.getCarID()
-            self.board.move(carID, direction)
+            self.board.moveCarByID(carID, direction)
+
             self.board.setCarsMovable()
+
 
     # Quit the game
     def quitGame(self):
         pygame.quit()
         sys.exit()
 
+    def checkVisitedStates(self, state):
+        return state in self.visitedStates
 
+    def addVisitedStates(self, state):
+        self.visitedStates.add(state)
 
     def loadGame1(self):
         self.board.addCar((3,2),2,1, 0, True)

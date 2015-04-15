@@ -183,3 +183,10 @@ class Board():
             for y in x:
                 print y, " ",
             print ""
+
+    def toString(self):
+        result = ''
+        for x in self.grid:
+            for y in x:
+                result = str(y)
+        return result
