@@ -18,43 +18,74 @@ class Game(object):
     visitedStates = set()
     statesToVisit = Queue()
 
+    solveMethod = "random" # random,  breadthfirst, astar
+
     """docstring for Game"""
     def __init__(self):
         pygame.init()
 
-        self.loadGame4()
+        self.loadGame1()
         self.board.setCarsMovable()
 
         print self.board.printGrid()
+        print self.board.checkPossibleMoves()
 
         self.screen = sc.Screen(self.windowWidth, self.windowHeight)
 
         self.last = pygame.time.get_ticks()
-        self.msPerStep = 1
+        self.msPerStep = 1000000
 
-        print self.board.checkPossibleMoves()
         self.runGame()
 
 
     def runGame(self):
 
         while not self.winState:
-            now = pygame.time.get_ticks()
-            if now - self.last >= self.msPerStep:
-                self.last = now
-                for event in pygame.event.get():
-                    # Event that should close the game.
-                    if event.type == QUIT \
-                         or (event.type == KEYUP and event.key == K_ESCAPE):
-                        self.quitGame()
+            mouseClicked = False
+            mouseMove = False
 
-                self.screen.drawScreen(self.board)
-                self.move()
+            for event in pygame.event.get():
+                # Event that should close the game.
+                if event.type == QUIT \
+                     or (event.type == KEYUP and event.key == K_ESCAPE):
+                    self.quitGame()
+                 # A click event, recognize a click when the button is released.
+                elif event.type == MOUSEBUTTONUP:
+                    mouseX, mouseY = event.pos
+                    mouseCoords = []
+                    mouseClicked = True
+                    mouseDown = False
+
+                # Start drag event, start drag when mouse button is pressed.
+                elif event.type == MOUSEBUTTONDOWN:
+                    mouseX, mouseY = event.pos
+                    mouseCoords = [mouseX, mouseY]
+                    mouseDown = True
+
+
+            now = pygame.time.get_ticks()
+            self.screen.drawScreen(self.board)
+            if now - self.last >= self.msPerStep or mouseClicked:
+                self.last = now
+
+                if self.solveMethod = "random":
+                    self.randomMove()
+                elif self.solveMethod = "breadthfirst":
+                    self.breadthfirstMove()
+                elif self.solveMethod = "astar":
+                    self.randomMove()
+                else:
+                    self.randomMove()
+
+
                 self.winState = self.board.checkForWin()
+                print self.board.printGrid()
+                print self.board.checkPossibleMoves()
 
                 # print self.board.printGrid()
                 # Update the screen
-                pygame.display.update()
+            pygame.display.update()
+
         while True:
             for event in pygame.event.get():
                     # Event that should close the game.
@@ -66,20 +97,32 @@ class Game(object):
             pygame.display.update()
 
 
-    def move(self):
+    def randomMove(self):
+        while not moved:
+            car = movableCars[random.randint(0,len(movableCars)-1)]
+            direction = 1 if random.random()>0.5 else -1
+            if car.getCanMove() and ((direction == -1 and self.board.carCanMoveBackward(car)) or (direction == 1 and self.board.carCanMoveForward(car))):
+                carID = car.getCarID()
+                self.board.moveCarByID(carID, direction)
+
+                self.board.setCarsMovable()
+                moved = True
+
+    def breadthfirstMove(self):
         movableCars = []
         for car in self.board.getCars():
             if car.getCanMove():
                 movableCars.append( car )
+        moved = False
+        while not moved:
+            car = movableCars[random.randint(0,len(movableCars)-1)]
+            direction = 1 if random.random()>0.5 else -1
+            if car.getCanMove() and ((direction == -1 and self.board.carCanMoveBackward(car)) or (direction == 1 and self.board.carCanMoveForward(car))):
+                carID = car.getCarID()
+                self.board.moveCarByID(carID, direction)
 
-        car = movableCars[random.randint(0,len(movableCars)-1)]
-        direction = 1 if random.random()>0.5 else -1
-        if car.getCanMove() and ((direction == -1 and self.board.carCanMoveBackward(car)) or (direction == 1 and self.board.carCanMoveForward(car))):
-            carID = car.getCarID()
-            self.board.moveCarByID(carID, direction)
-
-            self.board.setCarsMovable()
-
+                self.board.setCarsMovable()
+                moved = True
 
     # Quit the game
     def quitGame(self):

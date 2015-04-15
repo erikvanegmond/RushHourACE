@@ -66,6 +66,19 @@ class Board():
                 return False
         return True
 
+    def roomForACarBySettings(self, coords, direction, length):
+
+        for i in range(0,length):
+            yCoord1 = coords[1]
+            xCoord1 = coords[0]+i
+            yCoord2 = coords[1]+i
+            xCoord2 = coords[0]
+            if not (0 <= yCoord1 < self.height and 0 <= yCoord2 < self.height and 0 <= xCoord1 < self.width and 0 <= xCoord2 < self.width):
+                return False
+            if (direction and self.grid[yCoord1][xCoord1]) or (not direction and self.grid[yCoord2][xCoord2]):
+                return False
+        return True
+
     def setCarsMovable(self):
         for car in self.cars:
             self.setCarMovable(car)
@@ -112,29 +125,80 @@ class Board():
         return False
 
     def checkPossibleMoves(self):
-
-        possibleMoves = []
-
+        movableCars = []
         for car in self.cars:
+            if car.getCanMove():
+                movableCars.append( car )
+
+
+        possibleMoves = set()
+
+        for car in movableCars:
             coords = car.getCoords()
             horizontal = car.getDirection()
             length = car.getLength()
+            carID = car.getCarID()
             self.addZeros(car)
             x = 0
             y = 1
 
             if horizontal:
-                for distance in range(-self.width, self.width):
-                    if not self.width - 1 > distance + coords[x] + length > 0:
-                        continue
-                    elif coords[x] + length < self.width and not self.grid[coords[y]][coords[x] + length + distance]:
-                        possibleMoves.append((car.getCarID(), distance))
+                # for distance in range(-self.width+1, self.width):
+                #     if not self.width - 1 > distance + coords[x] + length > 0:
+                #         continue
+                #     elif coords[x] + length < self.width and not self.grid[coords[y]][coords[x] + length + distance]:
+                #         if self.roomForACarBySettings((coords[x] + distance, coords[y]), horizontal, length):
+                #             possibleMoves.append((carID, distance))
+                tempCoords = list(coords)
+                while tempCoords[x] < self.width:
+                    if self.roomForACarBySettings(tempCoords, horizontal, length):
+                        distance = tempCoords[x] - coords[x]
+                        if distance:
+                            possibleMoves.add((carID, distance))
+                    else:
+                        break
+                    tempCoords[x] += 1
+
+                tempCoords = list(coords)
+                while tempCoords[x] >= 0:
+                    if self.roomForACarBySettings(tempCoords, horizontal, length):
+                        distance = tempCoords[x] - coords[x]
+                        if distance:
+                            possibleMoves.add((carID, distance))
+                    else:
+                        break
+                    tempCoords[x] -= 1
             else:
-                for distance in range(-self.height, self.height):
-                    if not  self.height - 1 > coords[y] + distance + length > 0:
-                        continue
-                    if coords[y] + length < self.height and not self.grid[coords[y] + length + distance][x]:
-                        possibleMoves.append((car.getCarID(), distance))
+                #moveForeward
+                tempCoords = list(coords)
+                while tempCoords[y] < self.height:
+                    if self.roomForACarBySettings(tempCoords, horizontal, length):
+                        distance = tempCoords[y] - coords[y]
+                        if distance:
+                            possibleMoves.add((carID, distance))
+                    else:
+                        break
+                    tempCoords[y] += 1
+
+                tempCoords = list(coords)
+                while tempCoords[y] >= 0:
+                    if self.roomForACarBySettings(tempCoords, horizontal, length):
+                        distance = tempCoords[y] - coords[y]
+                        if distance:
+                            possibleMoves.add((carID, distance))
+                    else:
+                        break
+                    tempCoords[y] -= 1
+
+                # for distance in range(-self.height+1, self.height):
+
+
+                    # if not  self.height - 1 > coords[y] + distance + length > 0:
+                    #     continue
+                    # elif coords[y] + length < self.height and not self.grid[coords[y] + length + distance][x]:
+                    #     if self.roomForACarBySettings((coords[x], coords[y] + distance), horizontal, length):
+                    #         possibleMoves.append((carID, distance))
+            self.addNumbers(car)
 
         return possibleMoves
 

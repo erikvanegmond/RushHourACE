@@ -84,6 +84,7 @@ class Screen(object):
         direction = car.getDirection()
         lenght = car.getLength()
         color = self.ColorDict[car.getColor()]
+        carID = car.getCarID()
 
 
 
@@ -100,8 +101,12 @@ class Screen(object):
 
         rect = pygame.Rect(xStart, yStart, width, height)
 
-
         pygame.draw.rect(self.screen, color, rect)
+
+        label = self.FONT.render(str(carID), 3, self.BLACK)
+
+        # Calculate start coordinates.
+        self.screen.blit(label, (xStart+15, yStart+15))
 
         if not car.getCanMove():
             pygame.draw.rect(self.screen, self.BLACK, rect, 5)
