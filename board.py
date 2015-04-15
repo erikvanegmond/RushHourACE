@@ -50,6 +50,7 @@ class Board():
             print "can not add this car!"
 
     def moveCarByID(self, carID, distance):
+        car = self.cars[carID-1]
         self.addZeros(car)
         car.move(distance)
         self.addNumbers(car)
