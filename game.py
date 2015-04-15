@@ -32,6 +32,7 @@ class Game(object):
         self.last = pygame.time.get_ticks()
         self.msPerStep = 1
 
+        print self.board.checkPossibleMoves()
         self.runGame()
 
 

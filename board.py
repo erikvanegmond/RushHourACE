@@ -111,6 +111,32 @@ class Board():
                 return True
         return False
 
+    def checkPossibleMoves(self):
+
+        possibleMoves = []
+
+        for car in self.cars:
+            coords = car.getCoords()
+            horizontal = car.getDirection()
+            length = car.getLength()
+            self.addZeros(car)
+            x = 0
+            y = 1
+
+            if horizontal:
+                for distance in range(-self.width, self.width):
+                    if not self.width - 1 > distance + coords[x] + length > 0:
+                        continue
+                    elif coords[x] + length < self.width and not self.grid[coords[y]][coords[x] + length + distance]:
+                        possibleMoves.append((car.getCarID(), distance))
+            else:
+                for distance in range(-self.height, self.height):
+                    if not  self.height - 1 > coords[y] + distance + length > 0:
+                        continue
+                    if coords[y] + length < self.height and not self.grid[coords[y] + length + distance][x]:
+                        possibleMoves.append((car.getCarID(), distance))
+
+        return possibleMoves
 
     def setExitCoord(self, exitCoord):
         self.exitCoord = exitCoord
