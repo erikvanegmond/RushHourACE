@@ -41,6 +41,12 @@ class Board():
         else:
             print "can not add this car!"
 
+    def moveCarByID(self, carID, distance):
+        self.addZeros(car)
+        car.move(distance)
+        self.addNumbers(car)
+
+
     def roomForACar(self, car):
         coords = car.getCoords()
         direction = car.getDirection()

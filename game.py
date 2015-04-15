@@ -63,9 +63,8 @@ class Game(object):
         car = movableCars[random.randint(0,len(movableCars)-1)]
         direction = 1 if random.random()>0.5 else -1
         if car.getCanMove() and ((direction == -1 and self.board.carCanMoveBackward(car)) or (direction == 1 and self.board.carCanMoveForward(car))):
-            self.board.addZeros(car)
-            car.move(direction)
-            self.board.addNumbers(car)
+            carID = car.getCarID()
+            self.board.move(carID, direction)
             self.board.setCarsMovable()
 
     # Quit the game
