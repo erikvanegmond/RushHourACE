@@ -13,8 +13,6 @@ class Screen(object):
     gridWidth = 50
     gridHeight = 50
 
-
-
     pygame.display.set_caption('RushHour')
 
     # Set up the colors.

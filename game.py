@@ -4,6 +4,7 @@ import screen as sc
 from pygame.locals import *
 import random
 from Queue import *
+import copy
 
 class Game(object):
 
@@ -18,7 +19,7 @@ class Game(object):
     visitedStates = set()
     statesToVisit = Queue()
 
-    solveMethod = "random" # random,  breadthfirst, astar
+    solveMethod = "breadthfirst" # random,  breadthfirst, astar
 
     """docstring for Game"""
     def __init__(self):
@@ -29,6 +30,9 @@ class Game(object):
 
         print self.board.printGrid()
         print self.board.checkPossibleMoves()
+
+        if self.solveMethod is not "random":
+            self.statesToVisit.put(self.board)
 
         self.screen = sc.Screen(self.windowWidth, self.windowHeight)
 
@@ -68,11 +72,11 @@ class Game(object):
             if now - self.last >= self.msPerStep or mouseClicked:
                 self.last = now
 
-                if self.solveMethod = "random":
+                if self.solveMethod is "random":
                     self.randomMove()
-                elif self.solveMethod = "breadthfirst":
+                elif self.solveMethod is "breadthfirst":
                     self.breadthfirstMove()
-                elif self.solveMethod = "astar":
+                elif self.solveMethod is "astar":
                     self.randomMove()
                 else:
                     self.randomMove()
@@ -98,17 +102,6 @@ class Game(object):
 
 
     def randomMove(self):
-        while not moved:
-            car = movableCars[random.randint(0,len(movableCars)-1)]
-            direction = 1 if random.random()>0.5 else -1
-            if car.getCanMove() and ((direction == -1 and self.board.carCanMoveBackward(car)) or (direction == 1 and self.board.carCanMoveForward(car))):
-                carID = car.getCarID()
-                self.board.moveCarByID(carID, direction)
-
-                self.board.setCarsMovable()
-                moved = True
-
-    def breadthfirstMove(self):
         movableCars = []
         for car in self.board.getCars():
             if car.getCanMove():
@@ -123,6 +116,25 @@ class Game(object):
 
                 self.board.setCarsMovable()
                 moved = True
+
+    def breadthfirstMove(self):
+        print "breadthfirstMove"
+        if self.statesToVisit.empty():
+            print "no more possibleMoves"
+            return
+        self.board = self.statesToVisit.get()
+        self.visitedStates.add(self.board.toString())
+        possibleMoves = self.board.checkPossibleMoves()
+        for move in possibleMoves:
+            newBoard = self.board.copy()
+            newBoard.moveCarByID(move[0],move[1])
+            if not newBoard.toString() in self.visitedStates:
+                print "saving board"
+                self.statesToVisit.put(newBoard)
+            else:
+                print 'skip board', list(self.statesToVisit.queue), self.visitedStates
+        print self.visitedStates
+        print list(self.statesToVisit.queue)
 
     # Quit the game
     def quitGame(self):

@@ -1,4 +1,5 @@
 from car import *
+import copy
 
 class Board():
     """docstring for Board"""
@@ -9,7 +10,7 @@ class Board():
     exitCoord = (0,0)
 
     cars = []
-    numCars = 1
+    numCars = 1 #initial carID, increases with each car.
 
     parent = None
 
@@ -26,7 +27,8 @@ class Board():
         self.width = width
         self.height = height
         self.grid = [[0 for x in range(width)] for x in range(height)]
-        print "init board"
+        self.cars = []
+        print "init board", len(self.cars)
 
     def getWidth(self):
         return self.width
@@ -47,9 +49,10 @@ class Board():
                 self.setWinCarID(carID)
             self.numCars += 1
         else:
-            print "can not add this car!"
+            print "can not add this car!", car
 
     def moveCarByID(self, carID, distance):
+        print "Moving %d, %d" % (carID, distance)
         car = self.cars[carID-1]
         self.addZeros(car)
         car.move(distance)
@@ -68,11 +71,11 @@ class Board():
 
     def roomForACarBySettings(self, coords, direction, length):
 
+        yCoord1 = coords[1]
+        xCoord2 = coords[0]
         for i in range(0,length):
-            yCoord1 = coords[1]
             xCoord1 = coords[0]+i
             yCoord2 = coords[1]+i
-            xCoord2 = coords[0]
             if not (0 <= yCoord1 < self.height and 0 <= yCoord2 < self.height and 0 <= xCoord1 < self.width and 0 <= xCoord2 < self.width):
                 return False
             if (direction and self.grid[yCoord1][xCoord1]) or (not direction and self.grid[yCoord2][xCoord2]):
@@ -242,7 +245,6 @@ class Board():
                 self.grid[coords[1]+i][coords[0]] = 0
 
     def printGrid(self):
-
         for x in self.grid:
             for y in x:
                 print y, " ",
@@ -252,5 +254,21 @@ class Board():
         result = ''
         for x in self.grid:
             for y in x:
-                result = str(y)
+                result += str(y)
         return result
+
+    def copy(self):
+        copy = Board(self.width, self.height)
+        copy.printGrid()
+
+        print "==============len", (self.cars)
+        for car in self.cars:
+            copy.addCar(car.getCoords(), car.getLength(), car.getDirection(), car.getColor(), car.isWinCar)
+        copy.setExitCoord(self.getExitCoord())
+        return copy
+
+
+
+
+
+
