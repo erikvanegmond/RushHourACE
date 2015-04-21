@@ -21,6 +21,8 @@ class Game(object):
 
     priorityQueue = PriorityQueue()
 
+    chosenMoves = []
+
     solveMethod = "breadthfirst" # random,  breadthfirst, astar
 
     """docstring for Game"""
@@ -146,7 +148,9 @@ class Game(object):
             print "no possible moves"
             return
 
-        self.board = self.priorityQueue.get()[1]
+        newState = self.priorityQueue.get()[1]
+        self.board = newState[1]
+        self.chosenMoves.append(newState[2])
 
         if self.board.toString() in self.visitedStates:
             return
@@ -164,7 +168,7 @@ class Game(object):
             newBoard.setCarsMovable()
 
             if not newBoard.toString() in self.visitedStates:
-                self.priorityQueue.put((newBoard.getFCost(), newBoard))
+                self.priorityQueue.put((newBoard.getFCost(), newBoard, move))
             else:
                 continue
 
