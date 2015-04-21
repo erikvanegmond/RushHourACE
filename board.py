@@ -14,8 +14,21 @@ class Board():
 
     parent = None
 
+    # variables for aStar
+    gCost = 0
+    hCost = 0
+
     winCarID = 0
     grid = []
+
+    def getGCost(self):
+        return self.gCost
+
+    def getHCost(self):
+        return self.hCost
+
+    def getFCost(self):
+        return self.gCost + self.hCost
 
     def setParent(self, board):
         self.parent = board

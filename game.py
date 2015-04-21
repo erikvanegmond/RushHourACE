@@ -1,7 +1,7 @@
 import pygame, sys
 from board import *
 import screen as sc
-from pygame.locals import *
+frowm pygame.locals import *
 import random
 from Queue import *
 import copy
@@ -19,6 +19,8 @@ class Game(object):
     visitedStates = set()
     statesToVisit = Queue()
 
+    priorityQueue = PriorityQueue()
+
     solveMethod = "breadthfirst" # random,  breadthfirst, astar
 
     """docstring for Game"""
@@ -31,8 +33,10 @@ class Game(object):
         print self.board.printGrid()
         # print self.board.checkPossibleMoves()
 
-        if self.solveMethod is not "random":
+        if self.solveMethod is "breadthfirst":
             self.statesToVisit.put(self.board)
+        if self.solveMethod is "astar":
+            self.priorityQueue.put((self.board.getFCost(),self.board))
 
         self.screen = sc.Screen(self.windowWidth, self.windowHeight)
 
@@ -77,7 +81,7 @@ class Game(object):
                 elif self.solveMethod == "breadthfirst":
                     self.breadthfirstMove()
                 elif self.solveMethod == "astar":
-                    self.randomMove()
+                    self.aStarMove()
                 else:
                     self.randomMove()
 
@@ -135,6 +139,33 @@ class Game(object):
                 self.statesToVisit.put(newBoard)
             else:
                 # print 'skip board'
+                continue
+
+    def aStarMove(self):
+        if self.priorityQueue.empty():
+            print "no possible moves"
+            return
+
+        self.board = self.priorityQueue.get()[1]
+
+        if self.board.toString() in self.visitedStates:
+            return
+
+        self.visitedStates.add(self.board.toString())
+
+        possibleMoves = self.board.checkPossibleMoves()
+
+        for move in possibleMoves:
+            newBoard = self.board.copy()
+
+            newBoard.moveCarByID(move[0],move[1])
+            newBoard.gCost = self.board.getGCost() + move[1]
+            newBoard.hCost = 1 # constante schatting
+            newBoard.setCarsMovable()
+
+            if not newBoard.toString() in self.visitedStates:
+                self.priorityQueue.put((newBoard.getFCost(), newBoard))
+            else:
                 continue
 
     # Quit the game
