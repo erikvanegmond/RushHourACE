@@ -29,7 +29,6 @@ class Board():
         self.grid = [[0 for x in range(width)] for x in range(height)]
         self.cars = []
         self.numCars = 1
-        # print "init board"
 
     def getWidth(self):
         return self.width
@@ -53,7 +52,6 @@ class Board():
             print "can not add this car!", car
 
     def moveCarByID(self, carID, distance):
-        # print "Moving %d, %d" % (carID, distance)
         car = self.cars[carID-1]
         self.addZeros(car)
         car.move(distance)
@@ -71,13 +69,15 @@ class Board():
         return True
 
     def roomForACarBySettings(self, coords, direction, length):
-
         yCoord1 = coords[1]
         xCoord2 = coords[0]
         for i in range(0,length):
             xCoord1 = coords[0]+i
             yCoord2 = coords[1]+i
-            if not (0 <= yCoord1 < self.height and 0 <= yCoord2 < self.height and 0 <= xCoord1 < self.width and 0 <= xCoord2 < self.width):
+            if (direction and (not (0 <= yCoord1 < self.height and 0 <= xCoord1 < self.width ))):
+                return False
+
+            if not direction and (not ( 0 <= yCoord2 < self.height and 0 <= xCoord2 < self.width)):
                 return False
             if (direction and self.grid[yCoord1][xCoord1]) or (not direction and self.grid[yCoord2][xCoord2]):
                 return False
@@ -173,7 +173,6 @@ class Board():
                         break
                     tempCoords[x] -= 1
             else:
-                #moveForeward
                 tempCoords = list(coords)
                 while tempCoords[y] < self.height:
                     if self.roomForACarBySettings(tempCoords, horizontal, length):
@@ -226,10 +225,10 @@ class Board():
     def addNumbers(self, car):
         coords = car.getCoords()
         direction = car.getDirection()
-        lenght = car.getLength()
+        length = car.getLength()
         carID = car.getCarID()
 
-        for i in range(0,lenght):
+        for i in range(0,length):
             if direction:
                 self.grid[coords[1]][coords[0]+i] = carID
             else:
@@ -238,9 +237,9 @@ class Board():
     def addZeros(self, car):
         coords = car.getCoords()
         direction = car.getDirection()
-        lenght = car.getLength()
+        length = car.getLength()
 
-        for i in range(0,lenght):
+        for i in range(0,length):
             if direction:
                 self.grid[coords[1]][coords[0]+i] = 0
             else:

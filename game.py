@@ -21,15 +21,17 @@ class Game(object):
 
     solveMethod = "breadthfirst" # random,  breadthfirst, astar
 
+    moveCounter = 0
+
     """docstring for Game"""
     def __init__(self):
         pygame.init()
 
-        self.loadGame1()
+        self.loadGame3()
         self.board.setCarsMovable()
 
         print self.board.printGrid()
-        # print self.board.checkPossibleMoves()
+        print self.board.checkPossibleMoves()
 
         if self.solveMethod is not "random":
             self.statesToVisit.put(self.board)
@@ -37,7 +39,7 @@ class Game(object):
         self.screen = sc.Screen(self.windowWidth, self.windowHeight)
 
         self.last = pygame.time.get_ticks()
-        self.msPerStep = 1
+        self.msPerStep = 0#100000
 
         self.runGame()
 
@@ -75,18 +77,18 @@ class Game(object):
                 if self.solveMethod == "random":
                     self.randomMove()
                 elif self.solveMethod == "breadthfirst":
-                    self.breadthfirstMove()
+                    if self.breadthfirstMove() == -1:
+                        message = "Draw"
+                        self.winState = True
                 elif self.solveMethod == "astar":
                     self.randomMove()
                 else:
                     self.randomMove()
 
+                if self.board.checkForWin():
+                    message = "Game Won"
+                    self.winState = True
 
-                self.winState = self.board.checkForWin()
-                # print self.board.printGrid()
-                # print self.board.checkPossibleMoves()
-
-                # print self.board.printGrid()
                 # Update the screen
             pygame.display.update()
 
@@ -97,7 +99,7 @@ class Game(object):
                          or (event.type == KEYUP and event.key == K_ESCAPE):
                         self.quitGame()
             self.screen.drawScreen(self.board)
-            self.screen.drawMessage("Game Won!")
+            self.screen.drawMessage(message)
             pygame.display.update()
 
 
@@ -116,11 +118,13 @@ class Game(object):
 
                 self.board.setCarsMovable()
                 moved = True
+                self.moveCounter += 1
+                print self.moveCounter
 
     def breadthfirstMove(self):
         if self.statesToVisit.empty():
             print "no more possibleMoves"
-            return
+            return -1
         self.board = self.statesToVisit.get()
         if self.board.toString() in self.visitedStates:
             return
@@ -131,11 +135,17 @@ class Game(object):
             newBoard.moveCarByID(move[0],move[1])
             newBoard.setCarsMovable()
             if not newBoard.toString() in self.visitedStates:
-                # print "saving board"
                 self.statesToVisit.put(newBoard)
+                self.moveCounter += 1
+                print self.moveCounter
             else:
-                # print 'skip board'
                 continue
+
+            if newBoard.checkForWin():
+                self.board = newBoard
+                return
+
+
 
     # Quit the game
     def quitGame(self):
@@ -376,6 +386,20 @@ class Game(object):
         self.board.addCar((0,2),2,1, 0, True)
         self.board.addCar((4,2),3,0, 2)
         self.board.addCar((3,5),2,1, 4)
+
+    def loadTestGame3(self):
+        width = 6
+        height = 6
+        self.board = Board(width,height)
+        self.board.setExitCoord((5,2))
+        self.windowWidth = width * 50
+        self.windowHeight = height * 50
+        self.board.addCar((0,2),2,1, 0, True)
+        self.board.addCar((5,0),3,0, 2)
+        self.board.addCar((4,5),2,1, 2)
+
+
+
 
 if __name__ == '__main__':
     Game()
