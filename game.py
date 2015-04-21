@@ -1,7 +1,7 @@
 import pygame, sys
 from board import *
 import screen as sc
-frowm pygame.locals import *
+from pygame.locals import *
 import random
 from Queue import *
 import copy
@@ -23,7 +23,7 @@ class Game(object):
 
     chosenMoves = []
 
-    solveMethod = "breadthfirst" # random,  breadthfirst, astar
+    solveMethod = "astar" # random,  breadthfirst, astar
 
     moveCounter = 0
 
