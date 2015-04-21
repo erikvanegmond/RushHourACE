@@ -25,11 +25,11 @@ class Game(object):
     def __init__(self):
         pygame.init()
 
-        self.loadGame7()
+        self.loadGame1()
         self.board.setCarsMovable()
 
         print self.board.printGrid()
-        print self.board.checkPossibleMoves()
+        # print self.board.checkPossibleMoves()
 
         if self.solveMethod is not "random":
             self.statesToVisit.put(self.board)
@@ -37,7 +37,7 @@ class Game(object):
         self.screen = sc.Screen(self.windowWidth, self.windowHeight)
 
         self.last = pygame.time.get_ticks()
-        self.msPerStep = 1000000
+        self.msPerStep = 1
 
         self.runGame()
 
@@ -83,8 +83,8 @@ class Game(object):
 
 
                 self.winState = self.board.checkForWin()
-                print self.board.printGrid()
-                print self.board.checkPossibleMoves()
+                # print self.board.printGrid()
+                # print self.board.checkPossibleMoves()
 
                 # print self.board.printGrid()
                 # Update the screen
@@ -118,23 +118,24 @@ class Game(object):
                 moved = True
 
     def breadthfirstMove(self):
-        print "breadthfirstMove"
         if self.statesToVisit.empty():
             print "no more possibleMoves"
             return
         self.board = self.statesToVisit.get()
+        if self.board.toString() in self.visitedStates:
+            return
         self.visitedStates.add(self.board.toString())
         possibleMoves = self.board.checkPossibleMoves()
         for move in possibleMoves:
             newBoard = self.board.copy()
             newBoard.moveCarByID(move[0],move[1])
+            newBoard.setCarsMovable()
             if not newBoard.toString() in self.visitedStates:
-                print "saving board"
+                # print "saving board"
                 self.statesToVisit.put(newBoard)
             else:
-                print 'skip board', list(self.statesToVisit.queue), self.visitedStates
-        print self.visitedStates
-        print list(self.statesToVisit.queue)
+                # print 'skip board'
+                continue
 
     # Quit the game
     def quitGame(self):
@@ -206,7 +207,7 @@ class Game(object):
         self.board.addCar((0,4),2,0, 1)
         self.board.addCar((2,4),2,0, 5)
         self.board.addCar((4,4),2,1, 5)
-        
+
     def loadGame4(self):
         width = 9
         height = 9

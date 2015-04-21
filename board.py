@@ -28,7 +28,8 @@ class Board():
         self.height = height
         self.grid = [[0 for x in range(width)] for x in range(height)]
         self.cars = []
-        print "init board", len(self.cars)
+        self.numCars = 1
+        # print "init board"
 
     def getWidth(self):
         return self.width
@@ -41,7 +42,7 @@ class Board():
 
     def addCar(self, coords, length, direction, color=0, isWinCar=False):
         carID = self.numCars
-        car = Car(coords[0], coords[1], length, direction, carID, color)
+        car = Car(coords[0], coords[1], length, direction, carID, color, isWinCar)
         if self.roomForACar(car):
             self.cars.append(car)
             self.addNumbers(car)
@@ -52,7 +53,7 @@ class Board():
             print "can not add this car!", car
 
     def moveCarByID(self, carID, distance):
-        print "Moving %d, %d" % (carID, distance)
+        # print "Moving %d, %d" % (carID, distance)
         car = self.cars[carID-1]
         self.addZeros(car)
         car.move(distance)
@@ -218,6 +219,7 @@ class Board():
         car = self.cars[self.winCarID - 1]
         if car.getXCoord() + car.getLength() - 1 == self.exitCoord[0]:
             print 'Game won!'
+            self.printGrid()
             return True
         return False
 
@@ -259,9 +261,6 @@ class Board():
 
     def copy(self):
         copy = Board(self.width, self.height)
-        copy.printGrid()
-
-        print "==============len", (self.cars)
         for car in self.cars:
             copy.addCar(car.getCoords(), car.getLength(), car.getDirection(), car.getColor(), car.isWinCar)
         copy.setExitCoord(self.getExitCoord())

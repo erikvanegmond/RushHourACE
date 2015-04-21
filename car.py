@@ -76,5 +76,11 @@ class Car(object):
     def getCarID(self):
         return self.carID
 
+    def setIsWinCar(self, isWinCar):
+        self.isWinCar = isWinCar
+
+    def getIsWinCar(self):
+        return self.isWinCar
+
     def __str__(self):
-        return "carID:%d, Coords: (%d, %d), len: %d, direction: %d" % (self.getCarID(), self.getXCoord(), self.getYCoord(), self.getLength(), self.getDirection())
+        return "carID:%d, Coords: (%d, %d), len: %d, direction: %d, isWinCar: %d" % (self.getCarID(), self.getXCoord(), self.getYCoord(), self.getLength(), self.getDirection(), self.getIsWinCar())
