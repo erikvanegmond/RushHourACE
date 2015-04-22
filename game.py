@@ -32,7 +32,7 @@ class Game(object):
     def __init__(self):
         pygame.init()
 
-        loadGame3()
+        loadGame3(self)
         self.board.setCarsMovable()
 
         print self.board.printGrid()
