@@ -40,7 +40,7 @@ class Game(object):
         if self.solveMethod is "breadthfirst":
             self.statesToVisit.put(self.board)
         if self.solveMethod is "astar":
-            self.priorityQueue.put((self.board.getFCost(),self.board, ("no", 'move')))
+            self.priorityQueue.put((self.board.getFCost(),self.board))
 
         self.screen = sc.Screen(self.windowWidth, self.windowHeight)
 
@@ -94,6 +94,8 @@ class Game(object):
                 if self.board.checkForWin():
                     message = "Game Won"
                     self.winState = True
+                    print self.board.path
+                    print "Number of moves:", len(self.board.path)
 
                 # Update the screen
             pygame.display.update()
@@ -154,11 +156,9 @@ class Game(object):
 
         newState = self.priorityQueue.get()
         self.board = newState[1]
-        self.chosenMoves.append(newState[2])
-
-        print self.chosenMoves
 
         if self.board.toString() in self.visitedStates:
+            print 'skip state'
             return
 
         self.visitedStates.add(self.board.toString())
@@ -167,21 +167,21 @@ class Game(object):
 
         for move in possibleMoves:
             newBoard = self.board.copy()
-
             newBoard.moveCarByID(move[0],move[1])
             newBoard.gCost = self.board.getGCost() + move[1]
-            newBoard.hCost = 1 # constante schatting
             newBoard.setCarsMovable()
 
             if not newBoard.toString() in self.visitedStates:
-                self.priorityQueue.put((newBoard.getFCost(), newBoard, move))
+                self.priorityQueue.put((newBoard.getFCost(), newBoard))
+                self.moveCounter += 1
+                print self.moveCounter
             else:
                 continue
 
             if newBoard.checkForWin():
                 self.board = newBoard
                 return
-
+        
 
 
     # Quit the game

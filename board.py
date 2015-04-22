@@ -1,5 +1,6 @@
 from car import *
-import copy
+import copy as cp
+from collections import deque
 
 class Board():
     """docstring for Board"""
@@ -18,6 +19,8 @@ class Board():
     gCost = 0
     hCost = 0
 
+    path = deque()
+
     winCarID = 0
     grid = []
 
@@ -25,10 +28,14 @@ class Board():
         return self.gCost
 
     def getHCost(self):
+        for car in self.cars:
+            if car.carID == self.winCarID:
+                distance = self.width - car.xCoord - car.length
+        self.hCost = distance
         return self.hCost
 
     def getFCost(self):
-        return self.gCost + self.hCost
+        return self.gCost + self.getHCost()
 
     def setParent(self, board):
         self.parent = board
@@ -68,6 +75,7 @@ class Board():
         car = self.cars[carID-1]
         self.addZeros(car)
         car.move(distance)
+        self.path.appendleft((carID, distance))
         self.addNumbers(car)
 
 
@@ -276,6 +284,8 @@ class Board():
         for car in self.cars:
             copy.addCar(car.getCoords(), car.getLength(), car.getDirection(), car.getColor(), car.isWinCar)
         copy.setExitCoord(self.getExitCoord())
+        copy.path = cp.deepcopy(self.path)
+        
         return copy
 
 
