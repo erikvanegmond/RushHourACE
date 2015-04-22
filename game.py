@@ -152,9 +152,11 @@ class Game(object):
             print "no possible moves"
             return
 
-        newState = self.priorityQueue.get()[1]
+        newState = self.priorityQueue.get()
         self.board = newState[1]
         self.chosenMoves.append(newState[2])
+
+        print self.chosenMoves
 
         if self.board.toString() in self.visitedStates:
             return
