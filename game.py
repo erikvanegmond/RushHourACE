@@ -40,7 +40,7 @@ class Game(object):
         if self.solveMethod is "breadthfirst":
             self.statesToVisit.put(self.board)
         if self.solveMethod is "astar":
-            self.priorityQueue.put((self.board.getFCost(),self.board))
+            self.priorityQueue.put((self.board.getFCost(),self.board, ("no", 'move')))
 
         self.screen = sc.Screen(self.windowWidth, self.windowHeight)
 
