@@ -24,7 +24,7 @@ class Game(object):
 
     chosenMoves = []
 
-    solveMethod = "breadthfirst" # random,  breadthfirst, astar
+    solveMethod = "astar" # random,  breadthfirst, astar
 
     moveCounter = 0
 
@@ -32,7 +32,7 @@ class Game(object):
     def __init__(self):
         pygame.init()
 
-        self.loadGame3()
+        loadGame3()
         self.board.setCarsMovable()
 
         print self.board.printGrid()
@@ -157,15 +157,6 @@ class Game(object):
 
         newState = self.priorityQueue.get()
         self.board = newState[1]
-<<<<<<< HEAD
-=======
-        self.chosenMoves.append(newState[2])
-
-        counter = 0
-        for move in self.chosenMoves:
-            counter += 1
-        print counter
->>>>>>> bd718adcdbf73cbfd94f128015b4768732e2c7c4
 
         if self.board.toString() in self.visitedStates:
             print 'skip state'
@@ -191,7 +182,7 @@ class Game(object):
             if newBoard.checkForWin():
                 self.board = newBoard
                 return
-        
+
 
 
     # Quit the game
