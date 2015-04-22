@@ -28,10 +28,11 @@ class Game(object):
 
     moveCounter = 0
 
+    startTime = 0
+
     """docstring for Game"""
     def __init__(self):
         pygame.init()
-
         loadGame3(self)
         self.board.setCarsMovable()
 
@@ -48,6 +49,7 @@ class Game(object):
         self.last = pygame.time.get_ticks()
         self.msPerStep = 0#100000
 
+        self.startTime = pygame.time.get_ticks()
         self.runGame()
 
 
@@ -97,6 +99,7 @@ class Game(object):
                     self.winState = True
                     print self.board.path
                     print "Number of moves:", len(self.board.path)
+                    print "Time taken: %f seconds" % ( float(float(pygame.time.get_ticks() - self.startTime) /float(1000) ))
 
                 # Update the screen
             pygame.display.update()
