@@ -23,7 +23,7 @@ class Game(object):
 
     chosenMoves = []
 
-    solveMethod = "astar" # random,  breadthfirst, astar
+    solveMethod = "random" # random,  breadthfirst, astar
 
     moveCounter = 0
 
@@ -156,7 +156,10 @@ class Game(object):
         self.board = newState[1]
         self.chosenMoves.append(newState[2])
 
-        print self.chosenMoves
+        counter = 0
+        for move in self.chosenMoves:
+            counter += 1
+        print counter
 
         if self.board.toString() in self.visitedStates:
             return
