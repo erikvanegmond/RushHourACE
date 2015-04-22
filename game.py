@@ -6,6 +6,7 @@ import random
 from Queue import *
 import copy
 from configurations import *
+import argparse 
 
 class Game(object):
 
@@ -32,6 +33,21 @@ class Game(object):
 
     """docstring for Game"""
     def __init__(self):
+        parser = argparse.ArgumentParser(description='Solve Rush Hour')
+
+        parser.add_argument('--alg', type=str, choices =['random', 'breadthfirst', 'astar'], default = 'astar', 
+            help='random, breadthfirst or astar')
+
+        args = parser.parse_args()
+
+        print args
+
+        self.solveMethod = args.alg
+
+        self.startGame()
+
+
+    def startGame(self): 
         pygame.init()
         loadGame3(self)
         self.board.setCarsMovable()
@@ -39,9 +55,9 @@ class Game(object):
         print self.board.printGrid()
         print self.board.checkPossibleMoves()
 
-        if self.solveMethod is "breadthfirst":
+        if self.solveMethod == "breadthfirst":
             self.statesToVisit.put(self.board)
-        if self.solveMethod is "astar":
+        if self.solveMethod == "astar":
             self.priorityQueue.put((self.board.getFCost(),self.board))
 
         self.screen = sc.Screen(self.windowWidth, self.windowHeight)
