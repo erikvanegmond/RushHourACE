@@ -26,6 +26,7 @@ class Game(object):
     chosenMoves = []
 
     solveMethod = "astar" # random,  breadthfirst, astar
+    configuration = 1
 
     moveCounter = 0
 
@@ -38,18 +39,22 @@ class Game(object):
         parser.add_argument('--alg', type=str, choices =['random', 'breadthfirst', 'astar'], default = 'astar', 
             help='random, breadthfirst or astar')
 
+        parser.add_argument('--game', type=int, choices =[1, 2, 3, 4, 5, 6, 7, -1, -2, -3], default = '3', 
+            help='load a game from 1 to 7, test game form -1, -2 or -3')
+
         args = parser.parse_args()
 
-        print args
-
-        self.solveMethod = args.alg
+        argdict = vars(args) # converts namespace with all arguments to a dictionary
+      
+        self.solveMethod = argdict.get('alg')
+        self.configuration = argdict.get('game')
 
         self.startGame()
 
 
     def startGame(self): 
         pygame.init()
-        loadGame3(self)
+        loadGame(self, self.configuration)
         self.board.setCarsMovable()
 
         print self.board.printGrid()

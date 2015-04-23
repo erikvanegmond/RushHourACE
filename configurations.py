@@ -1,5 +1,30 @@
 from board import *
 
+def loadGame(game, num):
+    if num == 1:
+        loadGame1(game)
+    elif num == 2:
+        loadGame2(game)
+    elif num == 3:
+        loadGame3(game)
+    elif num == 4:
+        loadGame4(game)
+    elif num == 5:
+        loadGame5(game)
+    elif num == 6:
+        loadGame6(game)
+    elif num == 7:
+        loadGame7(game)
+    elif num == -1:
+        loadTestGame1(game)
+    elif num == -2:
+        loadTestGame2(game)
+    elif num == -3:
+        loadTestGame3(game)
+    else:
+        print 'no configuration'
+
+
 def loadGame1(game):
     width = 6
     height = 6
