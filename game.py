@@ -19,6 +19,7 @@ class Game(object):
     winState = False
 
     visitedStates = set()
+    visitedDict = dict()
     statesToVisit = Queue()
 
     priorityQueue = PriorityQueue()
@@ -189,12 +190,12 @@ class Game(object):
         for move in possibleMoves:
             newBoard = self.board.copy()
             newBoard.moveCarByID(move[0],move[1])
-            newBoard.gCost = self.board.getGCost() + move[1]
+            newBoard.gCost = self.board.getGCost() + 1 # + move[1] 
             newBoard.setCarsMovable()
 
-            if not (newBoard.toString() in self.visitedStates):
+            if not (newBoard.toString() in self.visitedDict) or newBoard.getGCost() < self.visitedDict[newBoard.toString()]:
                 self.priorityQueue.put((newBoard.getFCost(), newBoard))
-                self.visitedStates.add(newBoard.toString())
+                self.visitedDict[newBoard.toString()] = newBoard.getGCost()
                 self.moveCounter += 1
                 print self.moveCounter
             else:
