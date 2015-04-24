@@ -89,6 +89,7 @@ class Board():
                 return False
         return True
 
+
     def roomForACarBySettings(self, coords, direction, length):
         yCoord1 = coords[1]
         xCoord2 = coords[0]

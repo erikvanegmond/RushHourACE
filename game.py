@@ -39,7 +39,7 @@ class Game(object):
         parser.add_argument('--alg', type=str, choices =['random', 'breadthfirst', 'astar'], default = 'astar', 
             help='random, breadthfirst or astar')
 
-        parser.add_argument('--game', type=int, choices =[1, 2, 3, 4, 5, 6, 7, -1, -2, -3], default = '3', 
+        parser.add_argument('--game', type=int, choices =[1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4], default = '3', 
             help='load a game from 1 to 7, test game form -1, -2 or -3')
 
         args = parser.parse_args()

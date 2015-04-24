@@ -21,6 +21,8 @@ def loadGame(game, num):
         loadTestGame2(game)
     elif num == -3:
         loadTestGame3(game)
+    elif num == -4:
+        loadTestGame4(game)
     else:
         print 'no configuration'
 
@@ -264,5 +266,19 @@ def loadTestGame3(game):
     game.board.addCar((0,2),2,1, 0, True)
     game.board.addCar((5,0),3,0, 2)
     game.board.addCar((4,5),2,1, 2)
+
+def loadTestGame4(game):
+    width = 6
+    height = 6
+    game.board = Board(width,height)
+    game.board.setExitCoord((5,2))
+    game.windowWidth = width * 50
+    game.windowHeight = height * 50
+    game.board.addCar((0,2),2,1, 0, True)
+    game.board.addCar((2,0),3,0, 1)
+    game.board.addCar((4,0),2,1, 2)
+    game.board.addCar((0,3),3,1, 3)
+    game.board.addCar((5,3),3,0, 4)
+    
 
 
