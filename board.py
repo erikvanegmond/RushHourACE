@@ -34,8 +34,15 @@ class Board():
         self.hCost = distance
         return self.hCost
 
+    def getHCost2(self):
+        for car in self.cars:
+            if car.carID == self.winCarID:
+                distance = self.width - car.xCoord - car.length
+        self.hCost = distance + self.blockingCars()
+        return self.hCost
+
     def getFCost(self):
-        return self.gCost + self.getHCost()
+        return self.gCost + self.getHCost2()
 
     def setParent(self, board):
         self.parent = board
@@ -104,6 +111,15 @@ class Board():
             if (direction and self.grid[yCoord1][xCoord1]) or (not direction and self.grid[yCoord2][xCoord2]):
                 return False
         return True
+
+    def blockingCars(self):
+        car = self.cars[self.winCarID - 1]
+        yCoord = car.getYCoord()
+        numCars = 0
+        for i in range(car.getXCoord() + car.getLength(), self.width):
+            if self.grid[yCoord][i]:
+                numCars += 1
+        return numCars
 
     def setCarsMovable(self):
         for car in self.cars:
