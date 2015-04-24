@@ -278,7 +278,10 @@ class Board():
             for y in x:
                 result += str(y)
         return result
-
+    
+    def __str__(self):
+        return 'board'
+    
     def copy(self):
         copy = Board(self.width, self.height)
         for car in self.cars:

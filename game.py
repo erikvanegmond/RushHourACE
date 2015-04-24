@@ -175,18 +175,14 @@ class Game(object):
                 continue
 
     def aStarMove(self):
+        
         if self.priorityQueue.empty():
             print "no possible moves"
             return
 
+
         newState = self.priorityQueue.get()
         self.board = newState[1]
-
-        if self.board.toString() in self.visitedStates:
-            print 'skip state'
-            return
-
-        self.visitedStates.add(self.board.toString())
 
         possibleMoves = self.board.checkPossibleMoves()
 
@@ -196,8 +192,9 @@ class Game(object):
             newBoard.gCost = self.board.getGCost() + move[1]
             newBoard.setCarsMovable()
 
-            if not newBoard.toString() in self.visitedStates:
+            if not (newBoard.toString() in self.visitedStates):
                 self.priorityQueue.put((newBoard.getFCost(), newBoard))
+                self.visitedStates.add(newBoard.toString())
                 self.moveCounter += 1
                 print self.moveCounter
             else:
@@ -207,7 +204,7 @@ class Game(object):
                 self.board = newBoard
                 return
 
-
+        print 'qlen', self.priorityQueue.qsize()
 
     # Quit the game
     def quitGame(self):
