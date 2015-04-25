@@ -1,7 +1,11 @@
-import pygame, sys
+try:
+    import pygame, sys
+    import screen as sc
+    from pygame.locals import *
+except ImportError:
+    print "Didn't import pygame"
+
 from board import *
-import screen as sc
-from pygame.locals import *
 import random
 from Queue import *
 import copy
@@ -220,7 +224,7 @@ class Game(object):
                 self.priorityQueue.put((newBoard.getFCost(), newBoard))
                 self.visitedDict[newBoard.toString()] = newBoard.getGCost()
                 self.moveCounter += 1
-                print self.moveCounter
+                # print self.moveCounter
             else:
                 continue
 
@@ -228,7 +232,7 @@ class Game(object):
                 self.board = newBoard
                 return
 
-        print 'qlen', self.priorityQueue.qsize()
+        # print 'qlen', self.priorityQueue.qsize()
 
     # Quit the game
     def quitGame(self):
