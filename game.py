@@ -38,18 +38,20 @@ class Game(object):
         parser.add_argument('--game', type=int, choices =[1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4], default = '3', 
             help='load a game from 1 to 7, test game form -1, -2 or -3')
 
+        parser.add_argument('--visual', type = bool, default = 0, help = 'true or false for visualization')
         args = parser.parse_args()
 
         argdict = vars(args) # converts namespace with all arguments to a dictionary
       
         self.solveMethod = argdict.get('alg')
         self.configuration = argdict.get('game')
-
+        self.visualize = argdict.get('visual')
+        
         self.startGame()
 
 
-    def startGame(self): 
-        pygame.init()
+    def startGame(self):
+        
         loadGame(self, self.configuration)
         self.board.setCarsMovable()
 
@@ -61,14 +63,19 @@ class Game(object):
         if self.solveMethod == "astar":
             self.priorityQueue.put((self.board.getFCost(),self.board))
 
-        self.screen = sc.Screen(self.windowWidth, self.windowHeight)
+        if self.visualize:
+            pygame.init()
 
-        self.last = pygame.time.get_ticks()
-        self.msPerStep = 0#100000
+            self.screen = sc.Screen(self.windowWidth, self.windowHeight)
 
-        self.startTime = pygame.time.get_ticks()
-        self.runGame()
+            self.last = pygame.time.get_ticks()
+            self.msPerStep = 0#100000
 
+            self.startTime = pygame.time.get_ticks()
+
+            self.runGame()
+        else:
+            self.runWithoutVisual()
 
     def runGame(self):
 
@@ -130,6 +137,27 @@ class Game(object):
             self.screen.drawScreen(self.board)
             self.screen.drawMessage(message)
             pygame.display.update()
+
+    def runWithoutVisual(self):
+
+        while not self.winState:
+            if self.solveMethod == "random":
+                    self.randomMove()
+            elif self.solveMethod == "breadthfirst":
+                if self.breadthfirstMove() == -1:
+                    message = "Draw"
+                    self.winState = True
+            elif self.solveMethod == "astar":
+                self.aStarMove()
+            else:
+                self.randomMove()
+
+            if self.board.checkForWin():
+                print "Game Won"
+                print self.board.path
+                print "Number of moves:", len(self.board.path)
+                self.winState = True
+            
 
 
     def randomMove(self):
