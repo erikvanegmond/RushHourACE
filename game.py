@@ -37,26 +37,29 @@ class Game(object):
     def __init__(self):
         parser = argparse.ArgumentParser(description='Solve Rush Hour')
 
-        parser.add_argument('--alg', type=str, choices =['random', 'breadthfirst', 'astar'], default = 'astar', 
+        parser.add_argument('--alg', type=str, choices =['random', 'breadthfirst', 'astar'], default = 'astar',
             help='random, breadthfirst or astar')
 
-        parser.add_argument('--game', type=int, choices =[1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4], default = '3', 
+        parser.add_argument('--game', type=int, choices =[1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4], default = '3',
             help='load a game from 1 to 7, test game form -1, -2 or -3')
 
-        parser.add_argument('--visual', type = bool, default = 0, help = 'true or false for visualization')
+        parser.add_argument('-visual', "--visual", action='store_true', default=False,
+                    dest='visual',
+                    help='If argument is present visualization will be shown')
+
         args = parser.parse_args()
 
         argdict = vars(args) # converts namespace with all arguments to a dictionary
-      
+
         self.solveMethod = argdict.get('alg')
         self.configuration = argdict.get('game')
         self.visualize = argdict.get('visual')
-        
+
         self.startGame()
 
 
     def startGame(self):
-        
+
         loadGame(self, self.configuration)
         self.board.setCarsMovable()
 
@@ -129,7 +132,7 @@ class Game(object):
                     print self.board.path
                     print "Number of moves:", len(self.board.path)
                     print "Time taken: %f seconds" % ( float(float(pygame.time.get_ticks() - self.startTime) /float(1000) ))
-                    
+
             # Update the screen
             pygame.display.update()
 
@@ -185,7 +188,7 @@ class Game(object):
         for move in pathList:
             carID = move[0]
             distance = move[1]
-            
+
             self.screen.drawScreen(self.board)
             self.board.moveCarByID(carID, distance)
             time.sleep(1)
@@ -200,7 +203,7 @@ class Game(object):
                         self.quitGame()
             self.screen.drawScreen(self.board)
             pygame.display.update()
-            
+
     def showSolution(self, path):
 
         loadGame(self, self.configuration)
@@ -260,7 +263,7 @@ class Game(object):
                 continue
 
     def aStarMove(self):
-        
+
         if self.priorityQueue.empty():
             print "no possible moves"
             return
@@ -274,7 +277,7 @@ class Game(object):
         for move in possibleMoves:
             newBoard = self.board.copy()
             newBoard.moveCarByID(move[0],move[1])
-            newBoard.gCost = self.board.getGCost() + 1 # + move[1] 
+            newBoard.gCost = self.board.getGCost() + 1 # + move[1]
             newBoard.setCarsMovable()
 
             if not (newBoard.toString() in self.visitedDict) or newBoard.getGCost() < self.visitedDict[newBoard.toString()]:
