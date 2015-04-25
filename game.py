@@ -10,7 +10,8 @@ import random
 from Queue import *
 import copy
 from configurations import *
-import argparse 
+import argparse
+import time
 
 class Game(object):
 
@@ -128,19 +129,21 @@ class Game(object):
                     print self.board.path
                     print "Number of moves:", len(self.board.path)
                     print "Time taken: %f seconds" % ( float(float(pygame.time.get_ticks() - self.startTime) /float(1000) ))
-
-                # Update the screen
+                    
+            # Update the screen
             pygame.display.update()
 
-        while True:
-            for event in pygame.event.get():
-                    # Event that should close the game.
-                    if event.type == QUIT \
-                         or (event.type == KEYUP and event.key == K_ESCAPE):
-                        self.quitGame()
-            self.screen.drawScreen(self.board)
-            self.screen.drawMessage(message)
-            pygame.display.update()
+        self.visualizeSolution(self.board.path)
+
+##        while True:
+##            for event in pygame.event.get():
+##                    # Event that should close the game.
+##                    if event.type == QUIT \
+##                         or (event.type == KEYUP and event.key == K_ESCAPE):
+##                        self.quitGame()
+##            self.screen.drawScreen(self.board)
+##            self.screen.drawMessage(message)
+##            pygame.display.update()
 
     def runWithoutVisual(self):
 
@@ -164,6 +167,39 @@ class Game(object):
                 print "Number of moves:", len(self.board.path)
                 self.winState = True
                 self.showSolution(self.board.path)
+
+    def visualizeSolution(self, path):
+        print "called function"
+        loadGame(self, self.configuration)
+        self.board.setCarsMovable()
+
+        pathList = list()
+
+        while len(path) != 0:
+            pathList.append(path.pop())
+
+        print pathList
+
+        pygame.display.update()
+
+        for move in pathList:
+            carID = move[0]
+            distance = move[1]
+            
+            self.screen.drawScreen(self.board)
+            self.board.moveCarByID(carID, distance)
+            time.sleep(1)
+            pygame.display.update()
+            self.screen.drawScreen(self.board)
+
+        while True:
+            for event in pygame.event.get():
+                    # Event that should close the game.
+                    if event.type == QUIT \
+                         or (event.type == KEYUP and event.key == K_ESCAPE):
+                        self.quitGame()
+            self.screen.drawScreen(self.board)
+            pygame.display.update()
             
     def showSolution(self, path):
 
