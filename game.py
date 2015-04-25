@@ -24,11 +24,6 @@ class Game(object):
 
     priorityQueue = PriorityQueue()
 
-    chosenMoves = []
-
-    solveMethod = "astar" # random,  breadthfirst, astar
-    configuration = 1
-
     moveCounter = 0
 
     startTime = 0
