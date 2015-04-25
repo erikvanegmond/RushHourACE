@@ -156,13 +156,34 @@ class Game(object):
             else:
                 self.randomMove()
 
+            self.board.printGrid()
+
             if self.board.checkForWin():
                 print "Game Won"
                 print self.board.path
                 print "Number of moves:", len(self.board.path)
                 self.winState = True
+                self.showSolution(self.board.path)
             
+    def showSolution(self, path):
 
+        loadGame(self, self.configuration)
+        self.board.setCarsMovable()
+
+        pathList = list()
+
+        while len(path) != 0:
+            pathList.append(path.pop())
+
+        print "Start:"
+        self.board.printGrid()
+
+        for move in pathList:
+            carID = move[0]
+            distance = move[1]
+            self.board.moveCarByID(carID, distance)
+            print "Move:", move
+            self.board.printGrid()
 
     def randomMove(self):
         movableCars = []

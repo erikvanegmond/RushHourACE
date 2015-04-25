@@ -287,6 +287,8 @@ class Board():
                 print y, " ",
             print ""
 
+        print " "
+
     def toString(self):
         result = ''
         for x in self.grid:
