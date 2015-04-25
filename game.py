@@ -47,6 +47,14 @@ class Game(object):
                     dest='visual',
                     help='If argument is present visualization will be shown')
 
+        parser.add_argument('-showSolution', "--showSolution", action='store_true', default=False,
+                    dest='showSolution',
+                    help='If argument is present solution will be shown')
+
+        parser.add_argument('-onlyStatistics', "--onlyStatistics", action='store_true', default=False,
+                    dest='onlyStatistics',
+                    help='No ouput exept for statistics')
+
         args = parser.parse_args()
 
         argdict = vars(args) # converts namespace with all arguments to a dictionary
@@ -54,6 +62,8 @@ class Game(object):
         self.solveMethod = argdict.get('alg')
         self.configuration = argdict.get('game')
         self.visualize = argdict.get('visual')
+        self.showSolution = argdict.get('showSolution')
+        self.onlyStatistics = argdict.get('onlyStatistics')
 
         self.startGame()
 
@@ -63,8 +73,9 @@ class Game(object):
         loadGame(self, self.configuration)
         self.board.setCarsMovable()
 
-        print self.board.printGrid()
-        print self.board.checkPossibleMoves()
+        if not self.onlyStatistics:
+            print self.board.printGrid()
+            print self.board.checkPossibleMoves()
 
         if self.solveMethod == "breadthfirst":
             self.statesToVisit.put(self.board)
@@ -79,10 +90,11 @@ class Game(object):
             self.last = pygame.time.get_ticks()
             self.msPerStep = 0#100000
 
-            self.startTime = pygame.time.get_ticks()
+            self.startTime = time.time()
 
             self.runGame()
-        else:
+        elif not self.visualize or self.onlyStatistics:
+            self.startTime = time.time()
             self.runWithoutVisual()
 
     def runGame(self):
@@ -129,14 +141,14 @@ class Game(object):
                 if self.board.checkForWin():
                     message = "Game Won"
                     self.winState = True
-                    print self.board.path
-                    print "Number of moves:", len(self.board.path)
-                    print "Time taken: %f seconds" % ( float(float(pygame.time.get_ticks() - self.startTime) /float(1000) ))
+                    self.printStatistics()
+
 
             # Update the screen
             pygame.display.update()
+        if self.showSolution:
 
-        self.visualizeSolution(self.board.path)
+            self.visualizeSolution(self.board.path)
 
 ##        while True:
 ##            for event in pygame.event.get():
@@ -150,6 +162,7 @@ class Game(object):
 
     def runWithoutVisual(self):
 
+
         while not self.winState:
             if self.solveMethod == "random":
                     self.randomMove()
@@ -161,15 +174,18 @@ class Game(object):
                 self.aStarMove()
             else:
                 self.randomMove()
-
-            self.board.printGrid()
+            if not self.onlyStatistics:
+                self.board.printGrid()
 
             if self.board.checkForWin():
-                print "Game Won"
-                print self.board.path
-                print "Number of moves:", len(self.board.path)
+                # print "Game Won"
+                # print self.board.path
+
+                self.printStatistics()
+
                 self.winState = True
-                self.showSolution(self.board.path)
+                if self.showSolution:
+                    self.printSolution(self.board.path)
 
     def visualizeSolution(self, path):
         print "called function"
@@ -191,7 +207,7 @@ class Game(object):
 
             self.screen.drawScreen(self.board)
             self.board.moveCarByID(carID, distance)
-            time.sleep(1)
+            time.sleep(0.5)
             pygame.display.update()
             self.screen.drawScreen(self.board)
 
@@ -204,7 +220,7 @@ class Game(object):
             self.screen.drawScreen(self.board)
             pygame.display.update()
 
-    def showSolution(self, path):
+    def printSolution(self, path):
 
         loadGame(self, self.configuration)
         self.board.setCarsMovable()
@@ -223,6 +239,12 @@ class Game(object):
             self.board.moveCarByID(carID, distance)
             print "Move:", move
             self.board.printGrid()
+
+    def printStatistics(self):
+        print "Played game nr:", self.configuration
+        print "Number of moves:", len(self.board.path)
+        print "Number of visited states:", self.moveCounter
+        print "Time taken: %f seconds" % ( time.time() - self.startTime)
 
     def randomMove(self):
         movableCars = []

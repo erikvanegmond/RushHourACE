@@ -253,8 +253,8 @@ class Board():
     def checkForWin(self):
         car = self.cars[self.winCarID - 1]
         if car.getXCoord() + car.getLength() - 1 == self.exitCoord[0]:
-            print 'Game won!'
-            self.printGrid()
+            # print 'Game won!'
+            # self.printGrid()
             return True
         return False
 
@@ -295,17 +295,17 @@ class Board():
             for y in x:
                 result += str(y)
         return result
-    
+
     def __str__(self):
         return 'board'
-    
+
     def copy(self):
         copy = Board(self.width, self.height)
         for car in self.cars:
             copy.addCar(car.getCoords(), car.getLength(), car.getDirection(), car.getColor(), car.isWinCar)
         copy.setExitCoord(self.getExitCoord())
         copy.path = cp.deepcopy(self.path)
-        
+
         return copy
 
 
