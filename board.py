@@ -28,16 +28,14 @@ class Board():
         return self.gCost
 
     def getHCost(self):
-        for car in self.cars:
-            if car.carID == self.winCarID:
-                distance = self.width - car.xCoord - car.length
+        car = self.cars[self.winCarID - 1]
+        distance = self.width - car.xCoord - car.length
         self.hCost = distance
         return self.hCost
 
     def getHCost2(self):
-        for car in self.cars:
-            if car.carID == self.winCarID:
-                distance = self.width - car.xCoord - car.length
+        car = self.cars[self.winCarID - 1]
+        distance = self.width - car.xCoord - car.length
         self.hCost = distance + self.blockingCars()
         return self.hCost
 
