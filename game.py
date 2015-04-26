@@ -147,18 +147,32 @@ class Game(object):
             # Update the screen
             pygame.display.update()
         if self.showSolution:
-
             self.visualizeSolution(self.board.path)
 
-##        while True:
-##            for event in pygame.event.get():
-##                    # Event that should close the game.
-##                    if event.type == QUIT \
-##                         or (event.type == KEYUP and event.key == K_ESCAPE):
-##                        self.quitGame()
-##            self.screen.drawScreen(self.board)
-##            self.screen.drawMessage(message)
-##            pygame.display.update()
+        while True:
+            for event in pygame.event.get():
+                    # Event that should close the game.
+                    if event.type == QUIT \
+                        or (event.type == KEYUP and event.key == K_ESCAPE):
+                        self.quitGame()
+                    elif event.type == MOUSEBUTTONUP:
+                        mouseX, mouseY = event.pos
+                        mouseCoords = []
+                        mouseClicked = True
+                        mouseDown = False
+
+                    # Start drag event, start drag when mouse button is pressed.
+                    elif event.type == MOUSEBUTTONDOWN:
+                        mouseX, mouseY = event.pos
+                        mouseCoords = [mouseX, mouseY]
+                        mouseDown = True
+
+            self.screen.drawScreen(self.board)
+            self.screen.drawMessage(message)
+            pygame.display.update()
+            if mouseClicked:
+                self.visualizeSolution(self.board.path)
+
 
     def runWithoutVisual(self):
 
@@ -262,7 +276,7 @@ class Game(object):
                 self.board.setCarsMovable()
                 moved = True
                 self.moveCounter += 1
-                print self.moveCounter
+                # print self.moveCounter
 
     def breadthfirstMove(self):
         if self.statesToVisit.empty():
