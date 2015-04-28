@@ -37,31 +37,45 @@ class Game(object):
     def __init__(self):
         parser = argparse.ArgumentParser(description='Solve Rush Hour')
 
-        parser.add_argument('--alg', type=str, choices =['random', 'breadthfirst', 'astar'], default = 'astar', 
+        parser.add_argument('--alg', type=str, choices =['random', 'breadthfirst', 'astar'], default = 'astar',
             help='random, breadthfirst or astar')
 
-        parser.add_argument('--game', type=int, choices =[1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4], default = '3', 
+        parser.add_argument('--game', type=int, choices =[1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4], default = '3',
             help='load a game from 1 to 7, test game form -1, -2 or -3')
 
-        parser.add_argument('--visual', type = bool, default = 0, help = 'true or false for visualization')
+        parser.add_argument('-visual', "--visual", action='store_true', default=False,
+                    dest='visual',
+                    help='If argument is present visualization will be shown')
+
+        parser.add_argument('-showSolution', "--showSolution", action='store_true', default=False,
+                    dest='showSolution',
+                    help='If argument is present solution will be shown')
+
+        parser.add_argument('-onlyStatistics', "--onlyStatistics", action='store_true', default=False,
+                    dest='onlyStatistics',
+                    help='No ouput exept for statistics')
+
         args = parser.parse_args()
 
         argdict = vars(args) # converts namespace with all arguments to a dictionary
-      
+
         self.solveMethod = argdict.get('alg')
         self.configuration = argdict.get('game')
         self.visualize = argdict.get('visual')
-        
+        self.showSolution = argdict.get('showSolution')
+        self.onlyStatistics = argdict.get('onlyStatistics')
+
         self.startGame()
 
 
     def startGame(self):
-        
+
         loadGame(self, self.configuration)
         self.board.setCarsMovable()
 
-        print self.board.printGrid()
-        print self.board.checkPossibleMoves()
+        if not self.onlyStatistics:
+            print self.board.printGrid()
+            print self.board.checkPossibleMoves()
 
         if self.solveMethod == "breadthfirst":
             self.statesToVisit.put(self.board)
@@ -76,10 +90,11 @@ class Game(object):
             self.last = pygame.time.get_ticks()
             self.msPerStep = 0#100000
 
-            self.startTime = pygame.time.get_ticks()
+            self.startTime = time.time()
 
             self.runGame()
-        else:
+        elif not self.visualize or self.onlyStatistics:
+            self.startTime = time.time()
             self.runWithoutVisual()
 
     def runGame(self):
@@ -126,26 +141,41 @@ class Game(object):
                 if self.board.checkForWin():
                     message = "Game Won"
                     self.winState = True
-                    print self.board.path
-                    print "Number of moves:", len(self.board.path)
-                    print "Time taken: %f seconds" % ( float(float(pygame.time.get_ticks() - self.startTime) /float(1000) ))
-                    
+                    self.printStatistics()
+
+
             # Update the screen
             pygame.display.update()
+        if self.showSolution:
+            self.visualizeSolution(self.board.path)
 
-        self.visualizeSolution(self.board.path)
+        while True:
+            for event in pygame.event.get():
+                    # Event that should close the game.
+                    if event.type == QUIT \
+                        or (event.type == KEYUP and event.key == K_ESCAPE):
+                        self.quitGame()
+                    elif event.type == MOUSEBUTTONUP:
+                        mouseX, mouseY = event.pos
+                        mouseCoords = []
+                        mouseClicked = True
+                        mouseDown = False
 
-##        while True:
-##            for event in pygame.event.get():
-##                    # Event that should close the game.
-##                    if event.type == QUIT \
-##                         or (event.type == KEYUP and event.key == K_ESCAPE):
-##                        self.quitGame()
-##            self.screen.drawScreen(self.board)
-##            self.screen.drawMessage(message)
-##            pygame.display.update()
+                    # Start drag event, start drag when mouse button is pressed.
+                    elif event.type == MOUSEBUTTONDOWN:
+                        mouseX, mouseY = event.pos
+                        mouseCoords = [mouseX, mouseY]
+                        mouseDown = True
+
+            self.screen.drawScreen(self.board)
+            self.screen.drawMessage(message)
+            pygame.display.update()
+            if mouseClicked:
+                self.visualizeSolution(self.board.path)
+
 
     def runWithoutVisual(self):
+
 
         while not self.winState:
             if self.solveMethod == "random":
@@ -158,15 +188,18 @@ class Game(object):
                 self.aStarMove()
             else:
                 self.randomMove()
-
-            self.board.printGrid()
+            if not self.onlyStatistics:
+                self.board.printGrid()
 
             if self.board.checkForWin():
-                print "Game Won"
-                print self.board.path
-                print "Number of moves:", len(self.board.path)
+                # print "Game Won"
+                # print self.board.path
+
+                self.printStatistics()
+
                 self.winState = True
-                self.showSolution(self.board.path)
+                if self.showSolution:
+                    self.printSolution(self.board.path)
 
     def visualizeSolution(self, path):
         print "called function"
@@ -185,10 +218,10 @@ class Game(object):
         for move in pathList:
             carID = move[0]
             distance = move[1]
-            
+
             self.screen.drawScreen(self.board)
             self.board.moveCarByID(carID, distance)
-            time.sleep(1)
+            time.sleep(0.5)
             pygame.display.update()
             self.screen.drawScreen(self.board)
 
@@ -200,8 +233,8 @@ class Game(object):
                         self.quitGame()
             self.screen.drawScreen(self.board)
             pygame.display.update()
-            
-    def showSolution(self, path):
+
+    def printSolution(self, path):
 
         loadGame(self, self.configuration)
         self.board.setCarsMovable()
@@ -221,6 +254,12 @@ class Game(object):
             print "Move:", move
             self.board.printGrid()
 
+    def printStatistics(self):
+        print "Played game nr:", self.configuration
+        print "Number of moves:", len(self.board.path)
+        print "Number of visited states:", self.moveCounter
+        print "Time taken: %f seconds" % ( time.time() - self.startTime)
+
     def randomMove(self):
         movableCars = []
         for car in self.board.getCars():
@@ -237,7 +276,7 @@ class Game(object):
                 self.board.setCarsMovable()
                 moved = True
                 self.moveCounter += 1
-                print self.moveCounter
+                # print self.moveCounter
 
     def breadthfirstMove(self):
         if self.statesToVisit.empty():
@@ -260,7 +299,7 @@ class Game(object):
                 continue
 
     def aStarMove(self):
-        
+
         if self.priorityQueue.empty():
             print "no possible moves"
             return
@@ -274,7 +313,7 @@ class Game(object):
         for move in possibleMoves:
             newBoard = self.board.copy()
             newBoard.moveCarByID(move[0],move[1])
-            newBoard.gCost = self.board.getGCost() + 1 # + move[1] 
+            newBoard.gCost = self.board.getGCost() + 1 # + move[1]
             newBoard.setCarsMovable()
 
             if not (newBoard.toString() in self.visitedDict) or newBoard.getGCost() < self.visitedDict[newBoard.toString()]:
