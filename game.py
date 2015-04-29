@@ -3,7 +3,7 @@ try:
     import screen as sc
     from pygame.locals import *
 except ImportError:
-    print "Didn't import pygame"
+    pass
 
 from board import *
 import random
