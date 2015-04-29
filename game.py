@@ -79,9 +79,9 @@ class Game(object):
         loadGame(self, self.configuration)
         if len(self.playPath):
             self.solveMethod = "path"
-            print self.playPath
-            self.playPath = self.compressRandomMove(self.playPath)
-            print self.playPath
+            #print self.playPath
+            # self.playPath = self.compressRandomMove(self.playPath)
+            #print self.playPath
 
 
         self.board.setCarsMovable()
