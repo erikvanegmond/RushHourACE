@@ -31,6 +31,10 @@ class Game(object):
 
     playPath = list()
 
+    randomStates = list()
+
+    randomStatesIndex = list()
+
     moveCounter = 0
 
     startTime = 0
@@ -90,6 +94,8 @@ class Game(object):
             self.statesToVisit.put(self.board)
         if self.solveMethod == "astar":
             self.priorityQueue.put((self.board.getFCost(),self.board))
+        if self.solveMethod == "random":
+            self.randomStates.append(self.board.toString())
 
         if self.visualize:
             pygame.init()
@@ -159,9 +165,10 @@ class Game(object):
             pygame.display.update()
 
         if self.solveMethod == "random":
-            path = self.compressRandomMove(self.board.path)
-            print len(self.board.path),"--",len(path)
-            self.visualizeSolution(path)
+            # path = self.compressRandomMove(self.board.path)
+            # print len(self.board.path),"--",len(path)
+            # self.visualizeSolution(path)
+            print self.randomStatesIndex
 
         elif self.showSolution:
             self.visualizeSolution(self.board.path)
@@ -215,11 +222,21 @@ class Game(object):
                 self.printStatistics()
 
                 self.winState = True
-                if self.showSolution:
-                    self.printSolution(self.board.path)
+                # if self.showSolution:
+                #     self.printSolution(self.board.path)
 
         if self.solveMethod == "random":
-            self.compressRandomMove(self.board.path)
+            print 'index list', self.randomStatesIndex
+            print 'states:', self.randomStates
+
+            newPath = self.compressRandomPath(self.randomStatesIndex, self.randomStates, self.board.path)
+
+            print 'compressed:', newPath
+            print 'new length:', len(newPath)
+
+            self.printSolution(newPath, True)
+
+        #     self.compressRandomMove(self.board.path)
 
     def visualizeSolution(self, path):
         # print "called function"
@@ -254,15 +271,18 @@ class Game(object):
         #     self.screen.drawScreen(self.board)
         #     pygame.display.update()
 
-    def printSolution(self, path):
+    def printSolution(self, path, orientation):
 
         loadGame(self, self.configuration)
         self.board.setCarsMovable()
 
-        pathList = list()
+        if not orientation:
+            pathList = list()
 
-        while len(path) != 0:
-            pathList.append(path.pop())
+            while len(path) != 0:
+                pathList.append(path.pop())
+        else:
+            pathList = path
 
         print "Start:"
         self.board.printGrid()
@@ -273,6 +293,33 @@ class Game(object):
             self.board.moveCarByID(carID, distance)
             print "Move:", move
             self.board.printGrid()
+
+    def compressRandomPath(self, loops, states, path):
+
+        pathList = list()
+
+        while len(path) != 0:
+            pathList.append(path.pop())
+
+        biggestLoopSize = 0
+        biggestLoop = ()
+        for loop in loops:
+            loopSize = loop[1] - loop[0]
+
+            if loopSize > biggestLoopSize:
+                biggestLoop = loop
+                biggestLoopSize = loopSize
+
+        print "biggest:", biggestLoop
+
+        print "path:", pathList
+
+        if biggestLoop:
+            del pathList[biggestLoop[0]:biggestLoop[1]]
+            del states[biggestLoop[0]:biggestLoop[1]]
+
+
+        return pathList
 
     def compressRandomMove(self, path):
         print "compressing!", path
@@ -355,6 +402,14 @@ class Game(object):
                 moved = True
                 self.moveCounter += 1
                 # print self.moveCounter
+                if self.board.toString() in self.randomStates:
+                    for index, state in enumerate(self.randomStates):
+                        if self.board.toString() == state:
+                            self.randomStatesIndex.append((index, len(self.randomStates)))
+                            continue
+
+                self.randomStates.append(self.board.toString())
+
 
     def breadthfirstMove(self):
         if self.statesToVisit.empty():
