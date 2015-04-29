@@ -29,6 +29,8 @@ class Game(object):
 
     priorityQueue = PriorityQueue()
 
+    playPath = list()
+
     moveCounter = 0
 
     startTime = 0
@@ -40,7 +42,7 @@ class Game(object):
         parser.add_argument('--alg', type=str, choices =['random', 'breadthfirst', 'astar'], default = 'astar',
             help='random, breadthfirst or astar')
 
-        parser.add_argument('--game', type=int, choices =[1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4], default = '3',
+        parser.add_argument('--game', type=int, choices =[1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4, -5], default = '3',
             help='load a game from 1 to 7, test game form -1, -2 or -3')
 
         parser.add_argument('-visual', "--visual", action='store_true', default=False,
@@ -71,6 +73,13 @@ class Game(object):
     def startGame(self):
 
         loadGame(self, self.configuration)
+        if len(self.playPath):
+            self.solveMethod = "path"
+            print self.playPath
+            self.playPath = self.compressRandomMove(self.playPath)
+            print self.playPath
+
+
         self.board.setCarsMovable()
 
         if not self.onlyStatistics:
@@ -98,7 +107,7 @@ class Game(object):
             self.runWithoutVisual()
 
     def runGame(self):
-
+        print len(self.playPath)
         while not self.winState:
             mouseClicked = False
             mouseMove = False
@@ -135,6 +144,8 @@ class Game(object):
                         self.winState = True
                 elif self.solveMethod == "astar":
                     self.aStarMove()
+                elif self.solveMethod == "path":
+                    self.pathMove()
                 else:
                     self.randomMove()
 
@@ -146,26 +157,32 @@ class Game(object):
 
             # Update the screen
             pygame.display.update()
-        if self.showSolution:
+
+        if self.solveMethod == "random":
+            path = self.compressRandomMove(self.board.path)
+            print len(self.board.path),"--",len(path)
+            self.visualizeSolution(path)
+
+        elif self.showSolution:
             self.visualizeSolution(self.board.path)
 
         while True:
             for event in pygame.event.get():
-                    # Event that should close the game.
-                    if event.type == QUIT \
-                        or (event.type == KEYUP and event.key == K_ESCAPE):
-                        self.quitGame()
-                    elif event.type == MOUSEBUTTONUP:
-                        mouseX, mouseY = event.pos
-                        mouseCoords = []
-                        mouseClicked = True
-                        mouseDown = False
+                # Event that should close the game.
+                if event.type == QUIT \
+                    or (event.type == KEYUP and event.key == K_ESCAPE):
+                    self.quitGame()
+                elif event.type == MOUSEBUTTONUP:
+                    mouseX, mouseY = event.pos
+                    mouseCoords = []
+                    mouseClicked = True
+                    mouseDown = False
 
-                    # Start drag event, start drag when mouse button is pressed.
-                    elif event.type == MOUSEBUTTONDOWN:
-                        mouseX, mouseY = event.pos
-                        mouseCoords = [mouseX, mouseY]
-                        mouseDown = True
+                # Start drag event, start drag when mouse button is pressed.
+                elif event.type == MOUSEBUTTONDOWN:
+                    mouseX, mouseY = event.pos
+                    mouseCoords = [mouseX, mouseY]
+                    mouseDown = True
 
             self.screen.drawScreen(self.board)
             self.screen.drawMessage(message)
@@ -201,8 +218,11 @@ class Game(object):
                 if self.showSolution:
                     self.printSolution(self.board.path)
 
+        if self.solveMethod == "random":
+            self.compressRandomMove(self.board.path)
+
     def visualizeSolution(self, path):
-        print "called function"
+        # print "called function"
         loadGame(self, self.configuration)
         self.board.setCarsMovable()
 
@@ -225,14 +245,14 @@ class Game(object):
             pygame.display.update()
             self.screen.drawScreen(self.board)
 
-        while True:
-            for event in pygame.event.get():
-                    # Event that should close the game.
-                    if event.type == QUIT \
-                         or (event.type == KEYUP and event.key == K_ESCAPE):
-                        self.quitGame()
-            self.screen.drawScreen(self.board)
-            pygame.display.update()
+        # while True:
+        #     for event in pygame.event.get():
+        #             # Event that should close the game.
+        #             if event.type == QUIT \
+        #                  or (event.type == KEYUP and event.key == K_ESCAPE):
+        #                 self.quitGame()
+        #     self.screen.drawScreen(self.board)
+        #     pygame.display.update()
 
     def printSolution(self, path):
 
@@ -253,6 +273,64 @@ class Game(object):
             self.board.moveCarByID(carID, distance)
             print "Move:", move
             self.board.printGrid()
+
+    def compressRandomMove(self, path):
+        print "compressing!", path
+
+        loadGame(self, self.configuration)
+        self.board.setCarsMovable()
+
+        pathList = list()
+
+        boardList = list()
+
+        while len(path) != 0:
+            pathList.append(path.pop())
+
+        for move in pathList:
+            carID = move[0]
+            distance = move[1]
+            self.board.moveCarByID(carID, distance)
+
+            boardList.append(self.board.toString())
+
+        frontList = list()
+        backList = list()
+
+
+
+        for i in range(0, len(boardList)/2):
+            if not boardList[i] in backList:
+                frontList.append(boardList[i])
+            else:
+                backIndex = backList.index(boardList[i])
+                if backIndex:
+                    # shortboardList = boardList[:i+1] + boardList[-backIndex:]
+                    shortPathList = pathList[:i] + pathList[-backIndex:]
+                break
+
+            if i and  not boardList[-i] in frontList:
+                backList.append(boardList[-i])
+            elif not i:
+                continue
+            else:
+                frontIndex = frontList.index(boardList[-i])
+
+                if frontIndex:
+                    # shortboardList = boardList[:frontIndex+1] + boardList[-i-1:]
+                    shortPathList = pathList[:frontIndex] + pathList[-i:]
+                else:
+                    # shortboardList = boardList[-i:]
+                    shortPathList = pathList[-i:]
+
+                break
+
+        print "result:",shortPathList
+        loadGame(self, self.configuration)
+
+        return shortPathList
+
+
 
     def printStatistics(self):
         print "Played game nr:", self.configuration
@@ -329,6 +407,17 @@ class Game(object):
                 return
 
         # print 'qlen', self.priorityQueue.qsize()
+
+    def pathMove(self):
+        print self.playPath
+        if len(self.playPath):
+            move = self.playPath[0]
+            print move
+            self.board.moveCarByID(move[0], move[1])
+            del self.playPath[0]
+            self.moveCounter += 1
+            print self.moveCounter
+
 
     # Quit the game
     def quitGame(self):
