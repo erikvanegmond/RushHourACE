@@ -79,9 +79,9 @@ class Game(object):
         loadGame(self, self.configuration)
         if len(self.playPath):
             self.solveMethod = "path"
-            #print self.playPath
+            # print self.playPath
             # self.playPath = self.compressRandomMove(self.playPath)
-            #print self.playPath
+            # print self.playPath
 
 
         self.board.setCarsMovable()
@@ -229,10 +229,12 @@ class Game(object):
             print 'index list', self.randomStatesIndex
             print 'states:', self.randomStates
 
+            lengthOldPath = len(self.board.path)
+
             newPath = self.compressRandomPath(self.randomStatesIndex, self.randomStates, self.board.path)
 
             print 'compressed:', newPath
-            print 'new length:', len(newPath)
+            print 'old vs new length:', lengthOldPath, 'vs', len(newPath)
 
             self.printSolution(newPath, True)
 
@@ -317,7 +319,6 @@ class Game(object):
         if biggestLoop:
             del pathList[biggestLoop[0]:biggestLoop[1]]
             del states[biggestLoop[0]:biggestLoop[1]]
-
 
         return pathList
 
