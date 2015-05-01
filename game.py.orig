@@ -233,8 +233,13 @@ class Game(object):
 
             newPath = self.compressRandomPath(self.randomStatesIndex, self.randomStates, self.board.path)
 
+<<<<<<< HEAD
             # print 'compressed:', newPath
+            print 'new length:', len(newPath)
+=======
+            print 'compressed:', newPath
             print 'old vs new length:', lengthOldPath, 'vs', len(newPath)
+>>>>>>> 068b573ed28d48d010b874fb77e169c53ea6dd16
 
             # self.printSolution(newPath, True)
 
