@@ -13,12 +13,12 @@ class Car(object):
     isWinCar = False
 
     def __init__(self, xCoord, yCoord, length, direction, carID, color=0, isWinCar=False):
-        self.setXCoord(xCoord)
-        self.setYCoord(yCoord)
-        self.setLength(length)
-        self.setDirection(direction)
-        self.setColor(color)
-        self.setCarID(carID)
+        self.xCoord = xCoord
+        self.yCoord = yCoord
+        self.length = length
+        self.direction = direction
+        self.color = color
+        self.carID = carID
         self.isWinCar = isWinCar
 
     def getXCoord(self):

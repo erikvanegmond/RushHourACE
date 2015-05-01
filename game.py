@@ -164,13 +164,13 @@ class Game(object):
             # Update the screen
             pygame.display.update()
 
-        if self.solveMethod == "random":
+        # if self.solveMethod == "random":
             # path = self.compressRandomMove(self.board.path)
             # print len(self.board.path),"--",len(path)
             # self.visualizeSolution(path)
-            print self.randomStatesIndex
+            # print self.randomStatesIndex
 
-        elif self.showSolution:
+        if self.showSolution:
             self.visualizeSolution(self.board.path)
 
         while True:
@@ -226,15 +226,15 @@ class Game(object):
                 #     self.printSolution(self.board.path)
 
         if self.solveMethod == "random":
-            print 'index list', self.randomStatesIndex
-            print 'states:', self.randomStates
+            print 'index list', len(self.randomStatesIndex)
+            print 'states:', len(self.randomStates)
 
             newPath = self.compressRandomPath(self.randomStatesIndex, self.randomStates, self.board.path)
 
-            print 'compressed:', newPath
+            # print 'compressed:', newPath
             print 'new length:', len(newPath)
 
-            self.printSolution(newPath, True)
+            # self.printSolution(newPath, True)
 
         #     self.compressRandomMove(self.board.path)
 
@@ -312,7 +312,7 @@ class Game(object):
 
         print "biggest:", biggestLoop
 
-        print "path:", pathList
+        # print "path:", pathList
 
         if biggestLoop:
             del pathList[biggestLoop[0]:biggestLoop[1]]
@@ -392,8 +392,8 @@ class Game(object):
                 movableCars.append( car )
         moved = False
         while not moved:
-            car = movableCars[random.randint(0,len(movableCars)-1)]
-            direction = 1 if random.random()>0.5 else -1
+            car = random.choice(movableCars)
+            direction = 1 if random.randint(0,1) else -1
             if car.getCanMove() and ((direction == -1 and self.board.carCanMoveBackward(car)) or (direction == 1 and self.board.carCanMoveForward(car))):
                 carID = car.getCarID()
                 self.board.moveCarByID(carID, direction)
@@ -402,13 +402,14 @@ class Game(object):
                 moved = True
                 self.moveCounter += 1
                 # print self.moveCounter
-                if self.board.toString() in self.randomStates:
+                boardString = self.board.toString()
+                if boardString in self.randomStates:
                     for index, state in enumerate(self.randomStates):
-                        if self.board.toString() == state:
+                        if boardString == state:
                             self.randomStatesIndex.append((index, len(self.randomStates)))
                             continue
 
-                self.randomStates.append(self.board.toString())
+                self.randomStates.append(boardString)
 
 
     def breadthfirstMove(self):

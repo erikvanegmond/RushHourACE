@@ -67,7 +67,7 @@ class Board():
     def addCar(self, coords, length, direction, color=0, isWinCar=False):
         carID = self.numCars
         car = Car(coords[0], coords[1], length, direction, carID, color, isWinCar)
-        if self.roomForACar(car):
+        if self.roomForACarBySettings(coords, direction, length):
             self.cars.append(car)
             self.addNumbers(car)
             if isWinCar:
@@ -292,8 +292,9 @@ class Board():
     def toString(self):
         result = ''
         for x in self.grid:
-            for y in x:
-                result += str(y)
+            result += "".join(map(str, x))
+            # for y in x:
+            #     result += str(y)
         return result
 
     def __str__(self):
