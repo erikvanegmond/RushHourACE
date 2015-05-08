@@ -311,6 +311,13 @@ class Board():
                     continue
                 else:
                     print y, grid[i][j], i, j
+                    id = y if y else grid[i][j]
+                    if id:
+                        print self.cars[id -1]
+
+                    else:
+                        print "huh?"
+                        return    
                     exit()
 
 
