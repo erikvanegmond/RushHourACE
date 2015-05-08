@@ -231,8 +231,8 @@ class Game(object):
 
             lengthOldPath = len(self.board.path)
 
-            newPath = self.compressRandomPath(self.randomStatesIndex, self.randomStates, self.board.path)
-
+            # newPath = self.compressRandomPath(self.randomStatesIndex, self.randomStates, self.board.path)
+            newPath = self.compressPathWithAStar(self.board.path)
             # print 'compressed:', newPath
             print 'old vs new length:', lengthOldPath, 'vs', len(newPath)
 
@@ -378,6 +378,36 @@ class Game(object):
 
         return shortPathList
 
+    def compressPathWithAStar(self, path):
+        pathList = list()
+
+        while len(path) != 0:
+            pathList.append(path.pop())
+
+        loadGame(self, self.configuration)
+
+        statesGraph = dict() #{"stateString": ["newStateString1","newStateString2",...]}
+
+        currentState = self.board.toString()
+
+        for move in pathList:
+            self.board.moveCarByID(move[0],move[1])
+            newState = self.board.toString()
+            if currentState in statesGraph:
+                statesGraph[currentState].add(newState)
+            else:
+                statesGraph[currentState] = set([newState])
+
+            if newState in statesGraph:
+                statesGraph[newState].add(currentState)
+            else:
+                statesGraph[newState] = set([currentState])
+
+            currentState = newState
+
+
+
+
 
 
     def printStatistics(self):
@@ -403,14 +433,14 @@ class Game(object):
                 moved = True
                 self.moveCounter += 1
                 # print self.moveCounter
-                boardString = self.board.toString()
-                if boardString in self.randomStates:
-                    for index, state in enumerate(self.randomStates):
-                        if boardString == state:
-                            self.randomStatesIndex.append((index, len(self.randomStates)))
-                            continue
+                # boardString = self.board.toString()
+                # if boardString in self.randomStates:
+                #     for index, state in enumerate(self.randomStates):
+                #         if boardString == state:
+                #             self.randomStatesIndex.append((index, len(self.randomStates)))
+                #             continue
 
-                self.randomStates.append(boardString)
+                # self.randomStates.append(boardString)
 
 
     def breadthfirstMove(self):
