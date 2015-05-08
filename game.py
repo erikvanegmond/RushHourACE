@@ -408,6 +408,7 @@ class Game(object):
             currentState = newState
 
         self.aStarWithStatesGraph(statesGraph)
+        return self.board.path
 
     def printStatistics(self):
         print "Played game nr:", self.configuration
@@ -495,34 +496,32 @@ class Game(object):
 
     def aStarWithStatesGraph(self,statesGraph):
         loadGame(self, self.configuration)
-
-
         currentState = self.board.toString()
-        possibleStates = list(statesGraph[currentState])
 
-        self.board.getMoveToNewState(currentState)
-        print ""
-        for state in possibleStates:
-            self.board.getMoveToNewState(state)
-            exit()
+        while True:        
+            possibleStates = list(statesGraph[currentState])
 
-        for move in possibleMoves:
-            newBoard = self.board.copy()
-            newBoard.moveCarByID(move[0],move[1])
-            newBoard.gCost = self.board.getGCost() + 1 # + move[1]
-            newBoard.setCarsMovable()
+            print ""
+            for state in possibleStates:
+                move = self.board.getMoveToNewState(state)
+                
+            # for move in possibleMoves:
+                newBoard = self.board.copy()
+                newBoard.moveCarByID(move[0],move[1])
+                newBoard.gCost = self.board.getGCost() + 1 # + move[1]
+                newBoard.setCarsMovable()
 
-            if not (newBoard.toString() in self.visitedDict) or newBoard.getGCost() < self.visitedDict[newBoard.toString()]:
-                self.priorityQueue.put((newBoard.getFCost(), newBoard))
-                self.visitedDict[newBoard.toString()] = newBoard.getGCost()
-                self.moveCounter += 1
-                # print self.moveCounter
-            else:
-                continue
+                if not (newBoard.toString() in self.visitedDict) or newBoard.getGCost() < self.visitedDict[newBoard.toString()]:
+                    self.priorityQueue.put((newBoard.getFCost(), newBoard))
+                    self.visitedDict[newBoard.toString()] = newBoard.getGCost()
+                    self.moveCounter += 1
+                    # print self.moveCounter
+                else:
+                    continue
 
-            if newBoard.checkForWin():
-                self.board = newBoard
-                return
+                if newBoard.checkForWin():
+                    self.board = newBoard
+                    return
 
         # print 'qlen', self.priorityQueue.qsize()
 

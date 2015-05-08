@@ -298,12 +298,12 @@ class Board():
             for j in range(0,self.height):
                 grid[i][j] = int(newStateString[(i*self.width)+j])
 
+        print self.printGrid()
         for x in grid:
             for y in x:
                 print y, " ",
             print ""
         print " "
-        print self.printGrid()
 
         for i,x in enumerate(self.grid):
             for j,y in enumerate(x):
@@ -314,6 +314,40 @@ class Board():
                     id = y if y else grid[i][j]
                     if id:
                         print self.cars[id -1]
+                        if y:
+                            print "moved away"
+                            if self.cars[id-1].getDirection():
+                                print  "horizontal"
+                                if grid[i][j+1] == id:
+                                    print "moved left"
+                                    return (id, -1)
+                                else:
+                                    print "moved right"
+                                    return (id, 1)
+                                pass
+                            else:
+                                print "vertical"
+                                
+                            pass
+                        else:
+                            print "arrived"
+                            if self.cars[id-1].getDirection():
+                                print  "horizontal"
+                                if grid[i][j+1] == id:
+                                    print "moved left"
+                                    return (id, -1)
+                                else:
+                                    print "Moved right"
+                                    return (id, 1)
+                                pass
+                            else:
+                                print "vertical"
+                                if grid[i+1][j] == id:
+                                    print "moved up"
+                                    return (id, -1)
+                                else:
+                                    print "moved down"
+                                    return (id, 1)
 
                     else:
                         print "huh?"
@@ -360,8 +394,6 @@ class Board():
             print ""
 
         print " "
-
-
 
     def toString(self):
         result = ''
