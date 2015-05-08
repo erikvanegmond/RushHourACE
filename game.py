@@ -103,7 +103,7 @@ class Game(object):
             self.screen = sc.Screen(self.windowWidth, self.windowHeight)
 
             self.last = pygame.time.get_ticks()
-            self.msPerStep = 0#100000
+            self.msPerStep = 600
 
             self.startTime = time.time()
 

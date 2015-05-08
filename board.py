@@ -120,7 +120,9 @@ class Board():
         return numCars
 
     def setCarsMovable(self):
-        for car in self.cars:
+        cars = self.getCarsToUpdate()
+
+        for car in cars:
             self.setCarMovable(car)
 
     def setCarMovable(self, car):
@@ -165,8 +167,9 @@ class Board():
         return False
 
     def checkPossibleMoves(self):
+        cars = self.getCarsToUpdate()
         movableCars = []
-        for car in self.cars:
+        for car in cars:
             if car.getCanMove():
                 movableCars.append( car )
 
@@ -241,6 +244,44 @@ class Board():
 
         return possibleMoves
 
+    def getCarsToUpdate(self):
+        # laatste move in het pad ophalen --> self.path.appendleft((carID, distance))
+        cars = list()
+        
+        if self.path: 
+            lastchange = self.path[0][0]
+            
+            changedcar = self.cars[lastchange - 1]
+
+            carids = set()
+
+            if changedcar.getDirection():
+                y = changedcar.getYCoord()
+                carids.update(self.grid[y])
+                if y :
+                    carids.update(self.grid[y - 1])
+                if y+1 < self.height:
+                    carids.update(self.grid[y + 1])
+            else:
+                for row in self.grid:
+                    x = changedcar.getXCoord()
+                    if x:
+                        carids.add(row[x-1])
+                    carids.add(row[x])
+                    if x+1<self.width:
+                        carids.add(row[x+1])
+
+            if self.path:
+                carids = list(carids)
+                if 0 in carids:
+                    carids.remove(0)
+
+                for carid in carids:
+                    cars.append(self.cars[carid - 1])
+
+        else:
+            cars = self.cars
+        return cars
     def setExitCoord(self, exitCoord):
         self.exitCoord = exitCoord
 
