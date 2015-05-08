@@ -384,6 +384,8 @@ class Game(object):
         while len(path) != 0:
             pathList.append(path.pop())
 
+        # pathList = pathList[::-1]
+
         loadGame(self, self.configuration)
 
         statesGraph = dict() #{"stateString": ["newStateString1","newStateString2",...]}
@@ -405,10 +407,7 @@ class Game(object):
 
             currentState = newState
 
-
-
-
-
+        self.aStarWithStatesGraph(statesGraph)
 
     def printStatistics(self):
         print "Played game nr:", self.configuration
@@ -474,6 +473,38 @@ class Game(object):
         self.board = newState[1]
 
         possibleMoves = self.board.checkPossibleMoves()
+
+
+        for move in possibleMoves:
+            newBoard = self.board.copy()
+            newBoard.moveCarByID(move[0],move[1])
+            newBoard.gCost = self.board.getGCost() + 1 # + move[1]
+            newBoard.setCarsMovable()
+
+            if not (newBoard.toString() in self.visitedDict) or newBoard.getGCost() < self.visitedDict[newBoard.toString()]:
+                self.priorityQueue.put((newBoard.getFCost(), newBoard))
+                self.visitedDict[newBoard.toString()] = newBoard.getGCost()
+                self.moveCounter += 1
+                # print self.moveCounter
+            else:
+                continue
+
+            if newBoard.checkForWin():
+                self.board = newBoard
+                return
+
+    def aStarWithStatesGraph(self,statesGraph):
+        loadGame(self, self.configuration)
+
+
+        currentState = self.board.toString()
+        possibleStates = list(statesGraph[currentState])
+
+        self.board.getMoveToNewState(currentState)
+        print ""
+        for state in possibleStates:
+            self.board.getMoveToNewState(state)
+            exit()
 
         for move in possibleMoves:
             newBoard = self.board.copy()

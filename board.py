@@ -250,6 +250,30 @@ class Board():
     def setWinCarID(self, ID):
         self.winCarID = ID
 
+    def getMoveToNewState(self, newStateString):
+        grid = range(0, self.width)
+        for i in range(0,self.width):
+            grid[i] = range(0,self.height)
+            for j in range(0,self.height):
+                grid[i][j] = int(newStateString[(i*self.width)+j])
+
+        for x in grid:
+            for y in x:
+                print y, " ",
+            print ""
+        print " "
+        print self.printGrid()
+
+        for i,x in enumerate(self.grid):
+            for j,y in enumerate(x):
+                if grid[i][j] == y:
+                    continue
+                else:
+                    print y, grid[i][j], i, j
+                    exit()
+
+
+
     def checkForWin(self):
         car = self.cars[self.winCarID - 1]
         if car.getXCoord() + car.getLength() - 1 == self.exitCoord[0]:
@@ -288,6 +312,8 @@ class Board():
             print ""
 
         print " "
+
+
 
     def toString(self):
         result = ''
