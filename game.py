@@ -1,10 +1,11 @@
 try:
-    import pygame, sys
+    import pygame
     import screen as sc
     from pygame.locals import *
 except ImportError:
     pass
 
+import sys
 from board import *
 import random
 from Queue import *
@@ -14,7 +15,6 @@ import argparse
 import time
 
 class Game(object):
-
     board = None
     screen = None
 
@@ -39,12 +39,14 @@ class Game(object):
 
     startTime = 0
 
+    LIMIT = 3000
+
     """docstring for Game"""
     def __init__(self):
         parser = argparse.ArgumentParser(description='Solve Rush Hour')
 
-        parser.add_argument('--alg', type=str, choices =['random', 'breadthfirst', 'astar'], default = 'astar',
-            help='random, breadthfirst or astar')
+        parser.add_argument('--alg', type=str, choices =['random', 'breadthfirst', 'astar', 'depthfirst'], default = 'astar',
+            help='random, breadthfirst, astar, or depthfirst')
 
         parser.add_argument('--game', type=int, choices =[1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4, -5], default = '3',
             help='load a game from 1 to 7, test game form -1, -2 or -3')
@@ -108,9 +110,14 @@ class Game(object):
             self.startTime = time.time()
 
             self.runGame()
+
         elif not self.visualize or self.onlyStatistics:
             self.startTime = time.time()
-            self.runWithoutVisual()
+            if self.solveMethod == 'depthfirst':
+                sys.setrecursionlimit(self.LIMIT + 50)
+                self.depthFirstMove(self.board, 0)
+            else:
+                self.runWithoutVisual()
 
     def runGame(self):
         print len(self.playPath)
@@ -493,6 +500,34 @@ class Game(object):
             if newBoard.checkForWin():
                 self.board = newBoard
                 return
+
+    # vindt wel paden, maar niet de kortste
+    def depthFirstMove(self, board, depth):
+        print "Depth:", depth
+        self.visitedStates.add(board.toString())
+
+        if depth < self.LIMIT:
+            if board.checkForWin():
+                print board.path
+                print len(board.path)
+
+            possibleMoves = board.checkPossibleMoves()
+            neighbors = list()
+
+            for move in possibleMoves:
+                newBoard = board.copy()
+                newBoard.moveCarByID(move[0], move[1])
+                newBoard.setCarsMovable()
+                neighbors.append((newBoard, move))
+
+            for state in neighbors:
+                if state[0].toString() not in self.visitedStates:
+                    # print possibleMoves
+                    # print "Move:", state[1]
+                    # state[0].printGrid()
+                    self.depthFirstMove(state[0], depth+1)
+
+
 
     def aStarWithStatesGraph(self,statesGraph):
         loadGame(self, self.configuration)
