@@ -231,8 +231,8 @@ class Game(object):
 
             lengthOldPath = len(self.board.path)
 
-            newPath = self.compressRandomPath(self.randomStatesIndex, self.randomStates, self.board.path)
-
+            # newPath = self.compressRandomPath(self.randomStatesIndex, self.randomStates, self.board.path)
+            newPath = self.compressPathWithAStar(self.board.path)
             # print 'compressed:', newPath
             print 'old vs new length:', lengthOldPath, 'vs', len(newPath)
 
@@ -378,7 +378,36 @@ class Game(object):
 
         return shortPathList
 
+    def compressPathWithAStar(self, path):
+        pathList = list()
 
+        while len(path) != 0:
+            pathList.append(path.pop())
+
+        # pathList = pathList[::-1]
+
+        loadGame(self, self.configuration)
+
+        statesGraph = dict() #{"stateString": ["newStateString1","newStateString2",...]}
+
+        currentState = self.board.toString()
+
+        for move in pathList:
+            self.board.moveCarByID(move[0],move[1])
+            newState = self.board.toString()
+            if currentState in statesGraph:
+                statesGraph[currentState].add(newState)
+            else:
+                statesGraph[currentState] = set([newState])
+
+            if newState in statesGraph:
+                statesGraph[newState].add(currentState)
+            else:
+                statesGraph[newState] = set([currentState])
+
+            currentState = newState
+
+        self.aStarWithStatesGraph(statesGraph)
 
     def printStatistics(self):
         print "Played game nr:", self.configuration
@@ -403,14 +432,14 @@ class Game(object):
                 moved = True
                 self.moveCounter += 1
                 # print self.moveCounter
-                boardString = self.board.toString()
-                if boardString in self.randomStates:
-                    for index, state in enumerate(self.randomStates):
-                        if boardString == state:
-                            self.randomStatesIndex.append((index, len(self.randomStates)))
-                            continue
+                # boardString = self.board.toString()
+                # if boardString in self.randomStates:
+                #     for index, state in enumerate(self.randomStates):
+                #         if boardString == state:
+                #             self.randomStatesIndex.append((index, len(self.randomStates)))
+                #             continue
 
-                self.randomStates.append(boardString)
+                # self.randomStates.append(boardString)
 
 
     def breadthfirstMove(self):
@@ -444,6 +473,38 @@ class Game(object):
         self.board = newState[1]
 
         possibleMoves = self.board.checkPossibleMoves()
+
+
+        for move in possibleMoves:
+            newBoard = self.board.copy()
+            newBoard.moveCarByID(move[0],move[1])
+            newBoard.gCost = self.board.getGCost() + 1 # + move[1]
+            newBoard.setCarsMovable()
+
+            if not (newBoard.toString() in self.visitedDict) or newBoard.getGCost() < self.visitedDict[newBoard.toString()]:
+                self.priorityQueue.put((newBoard.getFCost(), newBoard))
+                self.visitedDict[newBoard.toString()] = newBoard.getGCost()
+                self.moveCounter += 1
+                # print self.moveCounter
+            else:
+                continue
+
+            if newBoard.checkForWin():
+                self.board = newBoard
+                return
+
+    def aStarWithStatesGraph(self,statesGraph):
+        loadGame(self, self.configuration)
+
+
+        currentState = self.board.toString()
+        possibleStates = list(statesGraph[currentState])
+
+        self.board.getMoveToNewState(currentState)
+        print ""
+        for state in possibleStates:
+            self.board.getMoveToNewState(state)
+            exit()
 
         for move in possibleMoves:
             newBoard = self.board.copy()
