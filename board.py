@@ -247,10 +247,10 @@ class Board():
     def getCarsToUpdate(self):
         # laatste move in het pad ophalen --> self.path.appendleft((carID, distance))
         cars = list()
-        
-        if self.path: 
+
+        if self.path:
             lastchange = self.path[0][0]
-            
+
             changedcar = self.cars[lastchange - 1]
 
             carids = set()
@@ -298,60 +298,63 @@ class Board():
             for j in range(0,self.height):
                 grid[i][j] = int(newStateString[(i*self.width)+j])
 
-        print self.printGrid()
-        for x in grid:
-            for y in x:
-                print y, " ",
-            print ""
-        print " "
+        # print self.printGrid()
+        # for x in grid:
+        #     for y in x:
+        #         print y, " ",
+        #     print ""
+        # print " "
 
         for i,x in enumerate(self.grid):
             for j,y in enumerate(x):
                 if grid[i][j] == y:
                     continue
                 else:
-                    print y, grid[i][j], i, j
+                    # print y, grid[i][j], i, j
                     id = y if y else grid[i][j]
                     if id:
-                        print self.cars[id -1]
+                        # print self.cars[id -1]
                         if y:
-                            print "moved away"
+                            # print "moved away"
                             if self.cars[id-1].getDirection():
-                                print  "horizontal"
+                                # print  "horizontal"
                                 if grid[i][j+1] == id:
-                                    print "moved left"
-                                    return (id, -1)
-                                else:
-                                    print "moved right"
+                                    # print "moved right"
                                     return (id, 1)
-                                pass
-                            else:
-                                print "vertical"
-                                
-                            pass
-                        else:
-                            print "arrived"
-                            if self.cars[id-1].getDirection():
-                                print  "horizontal"
-                                if grid[i][j+1] == id:
-                                    print "moved left"
-                                    return (id, -1)
                                 else:
-                                    print "Moved right"
-                                    return (id, 1)
-                                pass
+                                    # print "moved left"
+                                    return (id, -1)
                             else:
-                                print "vertical"
+                                # print "vertical"
                                 if grid[i+1][j] == id:
-                                    print "moved up"
+                                    # print "Moved down`"
+                                    return (id, 1)
+                                else:
+                                    # print "moved up"
+                                    return (id, -1)
+                        else:
+                            # print "arrived"
+                            if self.cars[id-1].getDirection():
+                                # print  "horizontal"
+                                if grid[i][j+1] == id:
+                                    # print "moved left"
                                     return (id, -1)
                                 else:
-                                    print "moved down"
+                                    # print "Moved right"
+                                    return (id, 1)
+                                pass
+                            else:
+                                # print "vertical"
+                                if grid[i+1][j] == id:
+                                    # print "moved up"
+                                    return (id, -1)
+                                else:
+                                    # print "moved down"
                                     return (id, 1)
 
                     else:
                         print "huh?"
-                        return    
+                        return
                     exit()
 
 

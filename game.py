@@ -39,7 +39,7 @@ class Game(object):
 
     startTime = 0
 
-    LIMIT = 3000
+    LIMIT = 50
 
     """docstring for Game"""
     def __init__(self):
@@ -59,8 +59,8 @@ class Game(object):
                     dest='showSolution',
                     help='If argument is present solution will be shown')
 
-        parser.add_argument('-onlyStatistics', "--onlyStatistics", action='store_true', default=False,
-                    dest='onlyStatistics',
+        parser.add_argument('-showEverything', "--showEverything", action='store_false', default=True,
+                    dest='showEverything',
                     help='No ouput exept for statistics')
 
         args = parser.parse_args()
@@ -71,7 +71,7 @@ class Game(object):
         self.configuration = argdict.get('game')
         self.visualize = argdict.get('visual')
         self.showSolution = argdict.get('showSolution')
-        self.onlyStatistics = argdict.get('onlyStatistics')
+        self.onlyStatistics = argdict.get('showEverything')
 
         self.startGame()
 
@@ -414,8 +414,7 @@ class Game(object):
 
             currentState = newState
 
-        self.aStarWithStatesGraph(statesGraph)
-        return self.board.path
+        return self.aStarWithStatesGraph(statesGraph)
 
     def printStatistics(self):
         print "Played game nr:", self.configuration
@@ -527,19 +526,21 @@ class Game(object):
                     # state[0].printGrid()
                     self.depthFirstMove(state[0], depth+1)
 
-
-
     def aStarWithStatesGraph(self,statesGraph):
         loadGame(self, self.configuration)
-        currentState = self.board.toString()
+        self.priorityQueue.put((self.board.getFCost(),self.board))
+        # currentState = self.board.toString()
 
-        while True:        
-            possibleStates = list(statesGraph[currentState])
+        while True:
+            currentState = self.priorityQueue.get()
+            self.board = currentState[1]
 
-            print ""
+            possibleStates = list(statesGraph[self.board.toString()])
+
+            # print "compressing with A*"
             for state in possibleStates:
                 move = self.board.getMoveToNewState(state)
-                
+
             # for move in possibleMoves:
                 newBoard = self.board.copy()
                 newBoard.moveCarByID(move[0],move[1])
@@ -556,7 +557,8 @@ class Game(object):
 
                 if newBoard.checkForWin():
                     self.board = newBoard
-                    return
+                    print self.board.path
+                    return self.board.path
 
         # print 'qlen', self.priorityQueue.qsize()
 
