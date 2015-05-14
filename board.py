@@ -167,16 +167,16 @@ class Board():
         return False
 
     def checkPossibleMoves(self):
-        cars = self.getCarsToUpdate()
-        movableCars = []
-        for car in cars:
-            if car.getCanMove():
-                movableCars.append( car )
+        # cars = self.getCarsToUpdate()
+        # movableCars = []
+        # for car in cars:
+        #     if car.getCanMove():
+        #         movableCars.append( car )
 
 
         possibleMoves = set()
 
-        for car in movableCars:
+        for car in self.cars:
             coords = car.getCoords()
             horizontal = car.getDirection()
             length = car.getLength()
