@@ -13,6 +13,7 @@ import copy
 from configurations import *
 import argparse
 import time
+import statisticsLogger as sl
 
 class Game(object):
     board = None
@@ -41,6 +42,8 @@ class Game(object):
 
     LIMIT = 50
 
+    stats = None
+
     """docstring for Game"""
     def __init__(self):
         parser = argparse.ArgumentParser(description='Solve Rush Hour')
@@ -63,6 +66,10 @@ class Game(object):
                     dest='showEverything',
                     help='No ouput exept for statistics')
 
+        parser.add_argument('-gatherStatistics', "--gatherStatistics", action='store_true', default=False,
+                    dest='gatherStatistics',
+                    help='Store statistics in a csv file')
+
         args = parser.parse_args()
 
         argdict = vars(args) # converts namespace with all arguments to a dictionary
@@ -72,6 +79,7 @@ class Game(object):
         self.visualize = argdict.get('visual')
         self.showSolution = argdict.get('showSolution')
         self.onlyStatistics = argdict.get('showEverything')
+        self.gatherStatistics = argdict.get('gatherStatistics')
 
         self.startGame()
 
@@ -84,6 +92,8 @@ class Game(object):
             # print self.playPath
             # self.playPath = self.compressRandomMove(self.playPath)
             # print self.playPath
+        else:
+            self.stats = sl.StatisticsLogger(self.configuration, self.solveMethod, ["iterations","open set", "closed set", "shortestPath", "longestPath"])
 
 
         self.board.setCarsMovable()
@@ -208,7 +218,8 @@ class Game(object):
 
 
     def runWithoutVisual(self):
-
+        if self.gatherStatistics:
+            moveCounter = 0
 
         while not self.winState:
             if self.solveMethod == "random":
@@ -225,6 +236,19 @@ class Game(object):
                 self.randomMove()
             if not self.onlyStatistics:
                 self.board.printGrid()
+
+            if self.gatherStatistics:
+                moveCounter += 1
+                longestPath = 0
+                shortestPath = 1000000
+                for board in list(self.priorityQueue.queue):
+                    l = len(board[1].path)
+                    if l<shortestPath:
+                        shortestPath = l
+                    if l>longestPath:
+                        longestPath = l
+
+                self.stats.log([moveCounter, self.priorityQueue.qsize(), len(self.visitedDict), shortestPath, longestPath])
 
             if self.board.checkForWin():
                 # print "Game Won"
