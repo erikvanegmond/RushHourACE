@@ -418,7 +418,7 @@ class Game(object):
 
     def printStatistics(self):
         print "Played game nr:", self.configuration
-        print "Number of moves:", len(self.board.path)
+        print "Path lenght to goal:", len(self.board.path)
         print "Number of visited states:", self.moveCounter
         print "Time taken: %f seconds" % ( time.time() - self.startTime)
 
