@@ -70,6 +70,10 @@ class Game(object):
                     dest='gatherStatistics',
                     help='Store statistics in a csv file')
 
+        parser.add_argument('-storePath', "--storePath", action='store_true', default=False,
+                    dest='storePath',
+                    help='Store path in a text file')
+
         args = parser.parse_args()
 
         argdict = vars(args) # converts namespace with all arguments to a dictionary
@@ -80,6 +84,7 @@ class Game(object):
         self.showSolution = argdict.get('showSolution')
         self.onlyStatistics = argdict.get('showEverything')
         self.gatherStatistics = argdict.get('gatherStatistics')
+        self.storePath = argdict.get('storePath')
 
         self.startGame()
 
@@ -103,11 +108,11 @@ class Game(object):
         if self.solveMethod == "breadthfirst":
             self.statesToVisit.put(self.board)
             if self.gatherStatistics:
-                self.stats = sl.StatisticsLogger(self.configuration, self.solveMethod, ["iterations","open set", "closed set", "shortestPath", "longestPath"])
+                self.stats = sl.StatisticsLogger(self.configuration, self.solveMethod, ["iterations", "time","visited boards","open set", "closed set", "shortestPath", "longestPath"])
         if self.solveMethod == "astar":
             self.priorityQueue.put((self.board.getFCost(),self.board))
             if self.gatherStatistics:
-                self.stats = sl.StatisticsLogger(self.configuration, self.solveMethod, ["iterations","open set", "closed set", "shortestPath", "longestPath"])
+                self.stats = sl.StatisticsLogger(self.configuration, self.solveMethod, ["iterations", "time","visited boards","open set", "closed set", "shortestPath", "longestPath"])
         if self.solveMethod == "random":
             self.randomStates.append(self.board.toString())
 
@@ -250,7 +255,7 @@ class Game(object):
                             shortestPath = l
                         if l>longestPath:
                             longestPath = l
-                    self.stats.log([iterationCounter, self.priorityQueue.qsize(), len(self.visitedDict), shortestPath, longestPath])
+                    self.stats.log([iterationCounter, time.time()-self.startTime, self.moveCounter, self.priorityQueue.qsize(), len(self.visitedDict), shortestPath, longestPath])
 
                 elif self.solveMethod =="breadthfirst":
                     for board in list(self.statesToVisit.queue):
@@ -259,7 +264,7 @@ class Game(object):
                             shortestPath = l
                         if l>longestPath:
                             longestPath = l
-                    self.stats.log([iterationCounter, self.statesToVisit.qsize(), len(self.visitedStates), shortestPath, longestPath])
+                    self.stats.log([iterationCounter, time.time()-self.startTime, self.moveCounter, self.statesToVisit.qsize(), len(self.visitedStates), shortestPath, longestPath])
 
 
             if self.board.checkForWin():
@@ -272,16 +277,27 @@ class Game(object):
                 # if self.showSolution:
                 #     self.printSolution(self.board.path)
 
+        if self.storePath:
+            fname = "pathGame%s-%s.csv" %(str(self.configuration), str(self.solveMethod))
+            f = open(fname, 'a')
+            f.write(str(len(list(self.board.path)))+", "+str(list(self.board.path))+"\n")
+
+
+
         if self.solveMethod == "random":
-            print 'index list', len(self.randomStatesIndex)
-            print 'states:', len(self.randomStates)
+            if self.gatherStatistics:
+                fname = "statisticsGame%s-%s.csv" %(str(self.configuration), str(self.solveMethod))
+                f = open(fname, 'a')
+                f.write(str( time.time() - self.startTime)+","+str(len(self.board.path))+"\n")
+            # print 'index list', len(self.randomStatesIndex)
+            # print 'states:', len(self.randomStates)
 
-            lengthOldPath = len(self.board.path)
+            # lengthOldPath = len(self.board.path)
 
-            # newPath = self.compressRandomPath(self.randomStatesIndex, self.randomStates, self.board.path)
-            newPath = self.compressPathWithAStar(self.board.path)
-            # print 'compressed:', newPath
-            print 'old vs new length:', lengthOldPath, 'vs', len(newPath)
+            # # newPath = self.compressRandomPath(self.randomStatesIndex, self.randomStates, self.board.path)
+            # newPath = self.compressPathWithAStar(self.board.path)
+            # # print 'compressed:', newPath
+            # print 'old vs new length:', lengthOldPath, 'vs', len(newPath)
 
             # self.printSolution(newPath, True)
 
@@ -457,6 +473,7 @@ class Game(object):
 
     def printStatistics(self):
         print "Played game nr:", self.configuration
+        print "Solved using:", self.solveMethod
         print "Path lenght to goal:", len(self.board.path)
         print "Number of visited states:", self.moveCounter
         print "Time taken: %f seconds" % ( time.time() - self.startTime)
