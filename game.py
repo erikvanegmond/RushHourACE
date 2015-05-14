@@ -122,7 +122,7 @@ class Game(object):
             self.screen = sc.Screen(self.windowWidth, self.windowHeight)
 
             self.last = pygame.time.get_ticks()
-            self.msPerStep = 600
+            self.msPerStep = 60000
 
             self.startTime = time.time()
 
@@ -222,6 +222,7 @@ class Game(object):
             pygame.display.update()
             if mouseClicked:
                 self.visualizeSolution(self.board.path)
+
 
 
     def runWithoutVisual(self):

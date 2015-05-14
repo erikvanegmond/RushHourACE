@@ -1,6 +1,7 @@
 from car import *
 import copy as cp
 from collections import deque
+import itertools
 
 class Board():
     """docstring for Board"""
@@ -24,6 +25,13 @@ class Board():
     winCarID = 0
     grid = []
 
+    def __init__(self, width = 6, height = 6):
+        self.width = width
+        self.height = height
+        self.grid = [[0 for x in range(width)] for x in range(height)]
+        self.cars = []
+        self.numCars = 1
+
     def getGCost(self):
         return self.gCost
 
@@ -33,10 +41,15 @@ class Board():
         self.hCost = distance
         return self.hCost
 
+    #number of blockingCars
     def getHCost2(self):
         car = self.cars[self.winCarID - 1]
-        distance = self.width - car.xCoord - car.length
-        self.hCost = distance + self.blockingCars()
+        self.hCost = 1 + self.blockingCars()
+        return self.hCost
+
+    def getHCost3(self):
+        self.hCost = self.getHCost2() + self.blockingCarsLevel2()
+
         return self.hCost
 
     def getFCost(self):
@@ -47,13 +60,6 @@ class Board():
 
     def getParent(self):
         return self.parent
-
-    def __init__(self, width = 6, height = 6):
-        self.width = width
-        self.height = height
-        self.grid = [[0 for x in range(width)] for x in range(height)]
-        self.cars = []
-        self.numCars = 1
 
     def getWidth(self):
         return self.width
@@ -112,12 +118,104 @@ class Board():
 
     def blockingCars(self):
         car = self.cars[self.winCarID - 1]
-        yCoord = car.getYCoord()
+        yCoord = car.yCoord
         numCars = 0
-        for i in range(car.getXCoord() + car.getLength(), self.width):
+        for i in range(car.xCoord + car.length, self.width):
             if self.grid[yCoord][i]:
                 numCars += 1
         return numCars
+
+    def blockingCarsLevel2(self):
+        car = self.cars[self.winCarID - 1]
+        yCoord = car.yCoord
+        xCoord = car.xCoord
+
+        downBlockingCars = list()
+        upBlockingCars = list()
+
+        for i in range(xCoord + car.length, self.width):
+            if self.grid[yCoord][i]:
+                (down, up) = self.blockingCarsToFreeTile((yCoord, i))
+                downBlockingCars.append(down)
+                upBlockingCars.append(up)
+
+        # print downBlockingCars, upBlockingCars
+        return len(self.findSmallestUnionSet( downBlockingCars, upBlockingCars ))
+
+
+    def blockingCarsToFreeTile(self, tile):
+        carId = self.grid[tile[0]][tile[1]]
+        car = self.cars[carId - 1]
+        yCoord = car.yCoord
+        xCoord = car.xCoord
+        length = car.length
+        direction = car.direction
+
+        downBlockingCars = set()
+        upBlockingCars = set()
+
+        if direction:
+            #should not occur when a car is blocking the wincar
+            pass
+        else:
+            if yCoord == tile[0]:
+                up = length
+                down =  1
+            else:
+                up = length-(tile[0]-yCoord)
+                down = tile[0]-yCoord+1
+
+            #checking down
+            for i in range(yCoord,yCoord+down):
+                y = i + length
+                if y < self.height:
+                    if self.grid[y][xCoord]:
+                        downBlockingCars.add(self.grid[y][xCoord])
+                else:
+                    downBlockingCars = 0
+                    break
+
+            #checking up
+            for i in range(yCoord-up,yCoord):
+                if i < 0:
+                    upBlockingCars = 0
+                    break
+                if self.grid[i][xCoord]:
+                    upBlockingCars.add(self.grid[i][xCoord])
+            return ( downBlockingCars,upBlockingCars )
+
+    def findSmallestUnionSet(self, set1, set2):
+        allSets = self.findAllUnionSets(set1, set2)
+        if allSets:
+            smallest = allSets[0]
+            for currentSet in allSets[1:]:
+                if len(currentSet) < len(smallest):
+                    smallest = currentSet
+            return smallest
+        else:
+            return []
+
+    def findAllUnionSets(self, set1, set2, setList = list()):
+        if not set1:
+            return setList
+
+        newList = list()
+        if set1[0] and set2[0]:
+            if not setList:
+                return self.findAllUnionSets(set1[1:], set2[1:], [set1[0], set2[0]])
+            else:
+                for item in setList:
+                    newList.append(item.union(set1[0]))
+                    newList.append(item.union(set2[0]))
+                return self.findAllUnionSets(set1[1:], set2[1:], newList)
+        elif not set1[0]:
+            for item in setList:
+                newList.append(item.union(set2[0]))
+            return self.findAllUnionSets(set1[1:], set2[1:], newList)
+        elif not set2[0]:
+            for item in setList:
+                newList.append(item.union(set1[0]))
+            return self.findAllUnionSets(set1[1:], set2[1:], newList)
 
     def setCarsMovable(self):
         cars = self.getCarsToUpdate()
