@@ -92,8 +92,6 @@ class Game(object):
             # print self.playPath
             # self.playPath = self.compressRandomMove(self.playPath)
             # print self.playPath
-        else:
-            self.stats = sl.StatisticsLogger(self.configuration, self.solveMethod, ["iterations","open set", "closed set", "shortestPath", "longestPath"])
 
 
         self.board.setCarsMovable()
@@ -104,8 +102,12 @@ class Game(object):
 
         if self.solveMethod == "breadthfirst":
             self.statesToVisit.put(self.board)
+            if self.gatherStatistics:
+                self.stats = sl.StatisticsLogger(self.configuration, self.solveMethod, ["iterations","open set", "closed set", "shortestPath", "longestPath"])
         if self.solveMethod == "astar":
             self.priorityQueue.put((self.board.getFCost(),self.board))
+            if self.gatherStatistics:
+                self.stats = sl.StatisticsLogger(self.configuration, self.solveMethod, ["iterations","open set", "closed set", "shortestPath", "longestPath"])
         if self.solveMethod == "random":
             self.randomStates.append(self.board.toString())
 
@@ -219,7 +221,7 @@ class Game(object):
 
     def runWithoutVisual(self):
         if self.gatherStatistics:
-            moveCounter = 0
+            iterationCounter = 0
 
         while not self.winState:
             if self.solveMethod == "random":
@@ -238,17 +240,27 @@ class Game(object):
                 self.board.printGrid()
 
             if self.gatherStatistics:
-                moveCounter += 1
+                iterationCounter += 1
                 longestPath = 0
                 shortestPath = 1000000
-                for board in list(self.priorityQueue.queue):
-                    l = len(board[1].path)
-                    if l<shortestPath:
-                        shortestPath = l
-                    if l>longestPath:
-                        longestPath = l
+                if self.solveMethod == "astar":
+                    for board in list(self.priorityQueue.queue):
+                        l = len(board[1].path)
+                        if l<shortestPath:
+                            shortestPath = l
+                        if l>longestPath:
+                            longestPath = l
+                    self.stats.log([iterationCounter, self.priorityQueue.qsize(), len(self.visitedDict), shortestPath, longestPath])
 
-                self.stats.log([moveCounter, self.priorityQueue.qsize(), len(self.visitedDict), shortestPath, longestPath])
+                elif self.solveMethod =="breadthfirst":
+                    for board in list(self.statesToVisit.queue):
+                        l = len(board.path)
+                        if l<shortestPath:
+                            shortestPath = l
+                        if l>longestPath:
+                            longestPath = l
+                    self.stats.log([iterationCounter, self.statesToVisit.qsize(), len(self.visitedStates), shortestPath, longestPath])
+
 
             if self.board.checkForWin():
                 # print "Game Won"
@@ -273,7 +285,6 @@ class Game(object):
 
             # self.printSolution(newPath, True)
 
-        #     self.compressRandomMove(self.board.path)
 
     def visualizeSolution(self, path):
         # print "called function"
@@ -493,7 +504,6 @@ class Game(object):
             if not newBoard.toString() in self.visitedStates:
                 self.statesToVisit.put(newBoard)
                 self.moveCounter += 1
-                print self.moveCounter
             else:
                 continue
 
