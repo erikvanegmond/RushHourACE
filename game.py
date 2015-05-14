@@ -156,7 +156,9 @@ class Game(object):
                         message = "Draw"
                         self.winState = True
                 elif self.solveMethod == "astar":
-                    self.aStarMove()
+                    if self.aStarMove()  == -1:
+                        message = "Draw"
+                        self.winState = True
                 elif self.solveMethod == "path":
                     self.pathMove()
                 else:
@@ -216,7 +218,9 @@ class Game(object):
                     message = "Draw"
                     self.winState = True
             elif self.solveMethod == "astar":
-                self.aStarMove()
+                if self.aStarMove()  == -1:
+                    message = "Draw"
+                    self.winState = True
             else:
                 self.randomMove()
             if not self.onlyStatistics:
@@ -451,7 +455,7 @@ class Game(object):
 
     def breadthfirstMove(self):
         if self.statesToVisit.empty():
-            print "no more possibleMoves"
+            print "Could not find a solution, no more possibleMoves"
             return -1
         self.board = self.statesToVisit.get()
         if self.board.toString() in self.visitedStates:
@@ -472,8 +476,8 @@ class Game(object):
     def aStarMove(self):
 
         if self.priorityQueue.empty():
-            print "no possible moves"
-            return
+            print "Could not find a solution, no more possibleMoves"
+            return -1
 
 
         newState = self.priorityQueue.get()
