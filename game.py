@@ -44,7 +44,6 @@ class Game(object):
 
     stats = None
 
-    """docstring for Game"""
     def __init__(self):
         parser = argparse.ArgumentParser(description='Solve Rush Hour')
 
@@ -91,7 +90,7 @@ class Game(object):
 
     def startGame(self):
 
-        loadGame(self, self.configuration)
+        self.board = loadGame(self.configuration)
         if len(self.playPath):
             self.solveMethod = "path"
             # print self.playPath
@@ -305,7 +304,7 @@ class Game(object):
 
     def visualizeSolution(self, path):
         # print "called function"
-        loadGame(self, self.configuration)
+        self.board = loadGame(self.configuration)
         self.board.setCarsMovable()
 
         pathList = list()
@@ -338,7 +337,7 @@ class Game(object):
 
     def printSolution(self, path, orientation):
 
-        loadGame(self, self.configuration)
+        self.board = loadGame(self.configuration)
         self.board.setCarsMovable()
 
         if not orientation:
@@ -388,7 +387,7 @@ class Game(object):
     def compressRandomMove(self, path):
         print "compressing!", path
 
-        loadGame(self, self.configuration)
+        self.board = loadGame(self.configuration)
         self.board.setCarsMovable()
 
         pathList = list()
@@ -437,7 +436,7 @@ class Game(object):
                 break
 
         print "result:",shortPathList
-        loadGame(self, self.configuration)
+        self.board = loadGame(self.configuration)
 
         return shortPathList
 
@@ -449,7 +448,7 @@ class Game(object):
 
         # pathList = pathList[::-1]
 
-        loadGame(self, self.configuration)
+        self.board = loadGame(self.configuration)
 
         statesGraph = dict() #{"stateString": ["newStateString1","newStateString2",...]}
 
@@ -583,7 +582,7 @@ class Game(object):
                     self.depthFirstMove(state[0], depth+1)
 
     def aStarWithStatesGraph(self,statesGraph):
-        loadGame(self, self.configuration)
+        self.board = loadGame(self.configuration)
         self.priorityQueue.put((self.board.getFCost(),self.board))
         # currentState = self.board.toString()
 

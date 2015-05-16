@@ -1,301 +1,313 @@
 from board import *
 
-def loadGame(game, num):
+def loadGame(num):
     if num == 1:
-        loadGame1(game)
+        return loadGame1()
     elif num == 2:
-        loadGame2(game)
+        return loadGame2()
     elif num == 3:
-        loadGame3(game)
+        return loadGame3()
     elif num == 4:
-        loadGame4(game)
+        return loadGame4()
     elif num == 5:
-        loadGame5(game)
+        return loadGame5()
     elif num == 6:
-        loadGame6(game)
+        return loadGame6()
     elif num == 7:
-        loadGame7(game)
+        return loadGame7()
     elif num == -1:
-        loadTestGame1(game)
+        return loadTestGame1()
     elif num == -2:
-        loadTestGame2(game)
+        return loadTestGame2()
     elif num == -3:
-        loadTestGame3(game)
+        return loadTestGame3()
     elif num == -4:
-        loadTestGame4(game)
+        return loadTestGame4()
     elif num == -5:
-        loadTestGame5(game)
+        return loadTestGame5()
     else:
         print 'no configuration'
 
 
-def loadGame1(game):
+def loadGame1():
     width = 6
     height = 6
-    game.board = Board(width,height)
-    game.board.setExitCoord((5,2))
-    game.windowWidth = width * 50
-    game.windowHeight = height * 50
-    game.board.addCar((3,2),2,1, 0, True)
-    game.board.addCar((2,0),3,0, 9)
-    game.board.addCar((3,0),2,1, 7)
-    game.board.addCar((5,0),3,0, 2)
-    game.board.addCar((3,3),3,0, 1)
-    game.board.addCar((4,3),2,1, 3)
-    game.board.addCar((0,4),2,0, 1)
-    game.board.addCar((1,4),2,1, 7)
-    game.board.addCar((4,5),2,1, 5)
+    board = Board(width,height)
+    board.setExitCoord((5,2))
+    windowWidth = width * 50
+    windowHeight = height * 50
+    board.addCar((3,2),2,1, 0, True)
+    board.addCar((2,0),3,0, 9)
+    board.addCar((3,0),2,1, 7)
+    board.addCar((5,0),3,0, 2)
+    board.addCar((3,3),3,0, 1)
+    board.addCar((4,3),2,1, 3)
+    board.addCar((0,4),2,0, 1)
+    board.addCar((1,4),2,1, 7)
+    board.addCar((4,5),2,1, 5)
+    return board
 
 
-def loadGame2(game):
+def loadGame2():
     width = 6
     height = 6
-    game.board = Board(width,height)
-    game.board.setExitCoord((5,2))
-    game.windowWidth = width * 50
-    game.windowHeight = height * 50
-    game.board.addCar((2,2),2,1, 0, True)
-    game.board.addCar((2,0),2,1, 8)
-    game.board.addCar((4,0),2,1, 1)
-    game.board.addCar((1,1),2,1, 1)
-    game.board.addCar((3,1),2,1, 5)
-    game.board.addCar((5,1),3,0, 2)
-    game.board.addCar((4,2),2,0, 6)
-    game.board.addCar((0,3),2,1, 5)
-    game.board.addCar((2,3),2,1, 8)
-    game.board.addCar((0,4),2,0, 1)
-    game.board.addCar((3,4),2,0, 6)
-    game.board.addCar((4,4),2,1, 5)
-    game.board.addCar((4,5),2,1, 2)
+    board = Board(width,height)
+    board.setExitCoord((5,2))
+    windowWidth = width * 50
+    windowHeight = height * 50
+    board.addCar((2,2),2,1, 0, True)
+    board.addCar((2,0),2,1, 8)
+    board.addCar((4,0),2,1, 1)
+    board.addCar((1,1),2,1, 1)
+    board.addCar((3,1),2,1, 5)
+    board.addCar((5,1),3,0, 2)
+    board.addCar((4,2),2,0, 6)
+    board.addCar((0,3),2,1, 5)
+    board.addCar((2,3),2,1, 8)
+    board.addCar((0,4),2,0, 1)
+    board.addCar((3,4),2,0, 6)
+    board.addCar((4,4),2,1, 5)
+    board.addCar((4,5),2,1, 2)
+    return board
 
-def loadGame3(game):
+def loadGame3():
     width = 6
     height = 6
-    game.board = Board(width,height)
-    game.board.setExitCoord((5,2))
-    game.windowWidth = width * 50
-    game.windowHeight = height * 50
-    game.board.addCar((0,2),2,1, 0, True)
-    game.board.addCar((1,0),2,1, 8)
-    game.board.addCar((3,0),3,1, 2)
-    game.board.addCar((1,1),2,1, 1)
-    game.board.addCar((3,1),2,0, 8)
-    game.board.addCar((4,1),2,1, 5)
-    game.board.addCar((2,2),2,0, 6)
-    game.board.addCar((5,2),2,0, 6)
-    game.board.addCar((0,3),2,1, 5)
-    game.board.addCar((3,3),2,1, 8)
-    game.board.addCar((0,4),2,0, 1)
-    game.board.addCar((2,4),2,0, 5)
-    game.board.addCar((4,4),2,1, 5)
+    board = Board(width,height)
+    board.setExitCoord((5,2))
+    windowWidth = width * 50
+    windowHeight = height * 50
+    board.addCar((0,2),2,1, 0, True)
+    board.addCar((1,0),2,1, 8)
+    board.addCar((3,0),3,1, 2)
+    board.addCar((1,1),2,1, 1)
+    board.addCar((3,1),2,0, 8)
+    board.addCar((4,1),2,1, 5)
+    board.addCar((2,2),2,0, 6)
+    board.addCar((5,2),2,0, 6)
+    board.addCar((0,3),2,1, 5)
+    board.addCar((3,3),2,1, 8)
+    board.addCar((0,4),2,0, 1)
+    board.addCar((2,4),2,0, 5)
+    board.addCar((4,4),2,1, 5)
+    return board
 
-def loadGame4(game):
+def loadGame4():
     width = 9
     height = 9
-    game.board = Board(width,height)
-    game.board.setExitCoord((8,4))
-    game.windowWidth = width * 50
-    game.windowHeight = height * 50
-    game.board.addCar((1,4),2,1, 0, True)
-    game.board.addCar((0,0),2,0, 5)
-    game.board.addCar((1,0),3,1, 2)
-    game.board.addCar((5,0),3,0, 11)
-    game.board.addCar((3,1),3,0, 9)
-    game.board.addCar((6,1),3,1, 9)
-    game.board.addCar((8,2),3,0, 2)
-    game.board.addCar((0,3),2,1, 7)
-    game.board.addCar((5,3),3,1, 2)
-    game.board.addCar((0,4),2,0, 3)
-    game.board.addCar((3,4),2,0, 4)
-    game.board.addCar((2,5),3,0, 2)
-    game.board.addCar((5,5),3,1, 10)
-    game.board.addCar((8,5),3,0, 2)
-    game.board.addCar((0,6),2,1, 1)
-    game.board.addCar((3,6),2,0, 8)
-    game.board.addCar((4,6),2,1, 4)
-    game.board.addCar((0,7),2,0, 8)
-    game.board.addCar((4,7),2,0, 1)
-    game.board.addCar((1,8),3,1, 11)
-    game.board.addCar((5,8),2,1, 6)
-    game.board.addCar((7,8),2,1, 4)
+    board = Board(width,height)
+    board.setExitCoord((8,4))
+    windowWidth = width * 50
+    windowHeight = height * 50
+    board.addCar((1,4),2,1, 0, True)
+    board.addCar((0,0),2,0, 5)
+    board.addCar((1,0),3,1, 2)
+    board.addCar((5,0),3,0, 11)
+    board.addCar((3,1),3,0, 9)
+    board.addCar((6,1),3,1, 9)
+    board.addCar((8,2),3,0, 2)
+    board.addCar((0,3),2,1, 7)
+    board.addCar((5,3),3,1, 2)
+    board.addCar((0,4),2,0, 3)
+    board.addCar((3,4),2,0, 4)
+    board.addCar((2,5),3,0, 2)
+    board.addCar((5,5),3,1, 10)
+    board.addCar((8,5),3,0, 2)
+    board.addCar((0,6),2,1, 1)
+    board.addCar((3,6),2,0, 8)
+    board.addCar((4,6),2,1, 4)
+    board.addCar((0,7),2,0, 8)
+    board.addCar((4,7),2,0, 1)
+    board.addCar((1,8),3,1, 11)
+    board.addCar((5,8),2,1, 6)
+    board.addCar((7,8),2,1, 4)
+    return board
 
-def loadGame5(game):
+def loadGame5():
     width = 9
     height = 9
-    game.board = Board(width,height)
-    game.board.setExitCoord((8,4))
-    game.windowWidth = width * 50
-    game.windowHeight = height * 50
-    game.board.addCar((6,4),2,1, 0, True)
-    game.board.addCar((0,0),3,1, 2)
-    game.board.addCar((3,0),3,0, 9)
-    game.board.addCar((5,0),2,0, 5)
-    game.board.addCar((6,0),2,0, 8)
-    game.board.addCar((7,1),2,1, 5)
-    game.board.addCar((4,2),2,1, 1)
-    game.board.addCar((6,2),2,0, 6)
-    game.board.addCar((4,3),2,1, 8)
-    game.board.addCar((7,3),2,1, 1)
-    game.board.addCar((2,4),3,1, 3)
-    game.board.addCar((5,4),3,0, 9)
-    game.board.addCar((8,4),3,0, 2)
-    game.board.addCar((0,5),2,0, 8)
-    game.board.addCar((2,5),2,0, 1)
-    game.board.addCar((3,6),2,1, 5)
-    game.board.addCar((6,6),2,1, 5)
-    game.board.addCar((0,7),2,0, 7)
-    game.board.addCar((1,7),2,0, 5)
-    game.board.addCar((2,7),2,1, 8)
-    game.board.addCar((4,7),2,0, 1)
-    game.board.addCar((5,7),3,1, 10)
-    game.board.addCar((8,7),2,0, 7)
-    game.board.addCar((2,8),2,1, 7)
+    board = Board(width,height)
+    board.setExitCoord((8,4))
+    windowWidth = width * 50
+    windowHeight = height * 50
+    board.addCar((6,4),2,1, 0, True)
+    board.addCar((0,0),3,1, 2)
+    board.addCar((3,0),3,0, 9)
+    board.addCar((5,0),2,0, 5)
+    board.addCar((6,0),2,0, 8)
+    board.addCar((7,1),2,1, 5)
+    board.addCar((4,2),2,1, 1)
+    board.addCar((6,2),2,0, 6)
+    board.addCar((4,3),2,1, 8)
+    board.addCar((7,3),2,1, 1)
+    board.addCar((2,4),3,1, 3)
+    board.addCar((5,4),3,0, 9)
+    board.addCar((8,4),3,0, 2)
+    board.addCar((0,5),2,0, 8)
+    board.addCar((2,5),2,0, 1)
+    board.addCar((3,6),2,1, 5)
+    board.addCar((6,6),2,1, 5)
+    board.addCar((0,7),2,0, 7)
+    board.addCar((1,7),2,0, 5)
+    board.addCar((2,7),2,1, 8)
+    board.addCar((4,7),2,0, 1)
+    board.addCar((5,7),3,1, 10)
+    board.addCar((8,7),2,0, 7)
+    board.addCar((2,8),2,1, 7)
+    return board
 
-def loadGame6(game):
+def loadGame6():
     width = 9
     height = 9
-    game.board = Board(width,height)
-    game.board.setExitCoord((8,4))
-    game.windowWidth = width * 50
-    game.windowHeight = height * 50
-    game.board.addCar((0,4),2,1, 0, True)
-    game.board.addCar((0,0),2,1, 8)
-    game.board.addCar((2,0),2,1, 6)
-    game.board.addCar((4,0),2,0, 5)
-    game.board.addCar((7,0),2,0, 8)
-    game.board.addCar((0,1),2,0, 6)
-    game.board.addCar((1,1),3,1, 3)
-    game.board.addCar((5,1),2,1, 1)
-    game.board.addCar((2,2),2,1, 5)
-    game.board.addCar((4,2),2,0, 1)
-    game.board.addCar((5,2),2,0, 6)
-    game.board.addCar((7,2),2,1, 5)
-    game.board.addCar((2,3),2,0, 8)
-    game.board.addCar((3,3),3,0, 2)
-    game.board.addCar((6,3),3,1, 10)
-    game.board.addCar((1,5),2,0, 1)
-    game.board.addCar((4,5),2,1, 6)
-    game.board.addCar((6,5),2,1, 1)
-    game.board.addCar((8,5),3,0, 9)
-    game.board.addCar((0,6),3,0, 9)
-    game.board.addCar((2,6),2,1, 5)
-    game.board.addCar((4,6),3,0, 10)
-    game.board.addCar((5,6),3,1, 2)
-    game.board.addCar((2,7),2,1, 8)
-    game.board.addCar((5,7),2,1, 5)
-    game.board.addCar((1,8),3,1, 3)
+    board = Board(width,height)
+    board.setExitCoord((8,4))
+    windowWidth = width * 50
+    windowHeight = height * 50
+    board.addCar((0,4),2,1, 0, True)
+    board.addCar((0,0),2,1, 8)
+    board.addCar((2,0),2,1, 6)
+    board.addCar((4,0),2,0, 5)
+    board.addCar((7,0),2,0, 8)
+    board.addCar((0,1),2,0, 6)
+    board.addCar((1,1),3,1, 3)
+    board.addCar((5,1),2,1, 1)
+    board.addCar((2,2),2,1, 5)
+    board.addCar((4,2),2,0, 1)
+    board.addCar((5,2),2,0, 6)
+    board.addCar((7,2),2,1, 5)
+    board.addCar((2,3),2,0, 8)
+    board.addCar((3,3),3,0, 2)
+    board.addCar((6,3),3,1, 10)
+    board.addCar((1,5),2,0, 1)
+    board.addCar((4,5),2,1, 6)
+    board.addCar((6,5),2,1, 1)
+    board.addCar((8,5),3,0, 9)
+    board.addCar((0,6),3,0, 9)
+    board.addCar((2,6),2,1, 5)
+    board.addCar((4,6),3,0, 10)
+    board.addCar((5,6),3,1, 2)
+    board.addCar((2,7),2,1, 8)
+    board.addCar((5,7),2,1, 5)
+    board.addCar((1,8),3,1, 3)
+    return board
 
-def loadGame7(game):
+def loadGame7():
     width = 12
     height = 12
-    game.board = Board(width,height)
-    game.board.setExitCoord((11,5))
-    game.windowWidth = width * 50
-    game.windowHeight = height * 50
-    game.board.addCar((2,5),2,1, 0, True)
-    game.board.addCar((0,0),2,0, 5)
-    game.board.addCar((6,0),2,0, 8)
-    game.board.addCar((7,0),3,1, 9)
-    game.board.addCar((10,0),2,1, 6)
-    game.board.addCar((5,1),2,0, 6)
-    game.board.addCar((10,1),2,0, 1)
-    game.board.addCar((11,1),2,0, 8)
-    game.board.addCar((0,2),3,1, 2)
-    game.board.addCar((3,2),2,1, 1)
-    game.board.addCar((6,2),3,0, 3)
-    game.board.addCar((7,2),2,1, 5)
-    game.board.addCar((0,3),3,0, 9)
-    game.board.addCar((1,3),3,0, 3)
-    game.board.addCar((5,3),2,0, 5)
-    game.board.addCar((7,3),2,1, 1)
-    game.board.addCar((9,3),2,1, 6)
-    game.board.addCar((2,4),3,1, 10)
-    game.board.addCar((7,4),3,1, 9)
-    game.board.addCar((4,5),2,0, 1)
-    game.board.addCar((5,5),2,0, 6)
-    game.board.addCar((0,6),3,1, 10)
-    game.board.addCar((3,6),2,0, 6)
-    game.board.addCar((6,6),3,0, 2)
-    game.board.addCar((7,6),2,0, 8)
-    game.board.addCar((9,6),2,0, 6)
-    game.board.addCar((10,6),2,1, 5)
-    game.board.addCar((0,7),3,1, 2)
-    game.board.addCar((4,7),2,1, 5)
-    game.board.addCar((10,7),2,1, 8)
-    game.board.addCar((0,8),2,1, 1)
-    game.board.addCar((2,8),2,0, 5)
-    game.board.addCar((3,8),3,1, 9)
-    game.board.addCar((7,8),3,1, 3)
-    game.board.addCar((11,8),2,0, 5)
-    game.board.addCar((3,9),3,1, 2)
-    game.board.addCar((6,9),3,0, 10)
-    game.board.addCar((8,9),2,1, 5)
-    game.board.addCar((10,9),3,0, 9)
-    game.board.addCar((9,10),2,0, 6)
-    game.board.addCar((11,10),2,0, 6)
-    game.board.addCar((1,11),2,1, 5)
-    game.board.addCar((3,11),3,1, 3)
-    game.board.addCar((7,11),2,1, 8)
+    board = Board(width,height)
+    board.setExitCoord((11,5))
+    windowWidth = width * 50
+    windowHeight = height * 50
+    board.addCar((2,5),2,1, 0, True)
+    board.addCar((0,0),2,0, 5)
+    board.addCar((6,0),2,0, 8)
+    board.addCar((7,0),3,1, 9)
+    board.addCar((10,0),2,1, 6)
+    board.addCar((5,1),2,0, 6)
+    board.addCar((10,1),2,0, 1)
+    board.addCar((11,1),2,0, 8)
+    board.addCar((0,2),3,1, 2)
+    board.addCar((3,2),2,1, 1)
+    board.addCar((6,2),3,0, 3)
+    board.addCar((7,2),2,1, 5)
+    board.addCar((0,3),3,0, 9)
+    board.addCar((1,3),3,0, 3)
+    board.addCar((5,3),2,0, 5)
+    board.addCar((7,3),2,1, 1)
+    board.addCar((9,3),2,1, 6)
+    board.addCar((2,4),3,1, 10)
+    board.addCar((7,4),3,1, 9)
+    board.addCar((4,5),2,0, 1)
+    board.addCar((5,5),2,0, 6)
+    board.addCar((0,6),3,1, 10)
+    board.addCar((3,6),2,0, 6)
+    board.addCar((6,6),3,0, 2)
+    board.addCar((7,6),2,0, 8)
+    board.addCar((9,6),2,0, 6)
+    board.addCar((10,6),2,1, 5)
+    board.addCar((0,7),3,1, 2)
+    board.addCar((4,7),2,1, 5)
+    board.addCar((10,7),2,1, 8)
+    board.addCar((0,8),2,1, 1)
+    board.addCar((2,8),2,0, 5)
+    board.addCar((3,8),3,1, 9)
+    board.addCar((7,8),3,1, 3)
+    board.addCar((11,8),2,0, 5)
+    board.addCar((3,9),3,1, 2)
+    board.addCar((6,9),3,0, 10)
+    board.addCar((8,9),2,1, 5)
+    board.addCar((10,9),3,0, 9)
+    board.addCar((9,10),2,0, 6)
+    board.addCar((11,10),2,0, 6)
+    board.addCar((1,11),2,1, 5)
+    board.addCar((3,11),3,1, 3)
+    board.addCar((7,11),2,1, 8)
+    return board
 
-def loadTestGame1(game):
+def loadTestGame1():
     width = 6
     height = 6
-    game.board = Board(width,height)
-    game.board.setExitCoord((5,2))
-    game.windowWidth = width * 50
-    game.windowHeight = height * 50
-    game.board.addCar((0,2),2,1, 0, True)
-    game.board.addCar((4,2),2,0, 4)
+    board = Board(width,height)
+    board.setExitCoord((5,2))
+    windowWidth = width * 50
+    windowHeight = height * 50
+    board.addCar((0,2),2,1, 0, True)
+    board.addCar((4,2),2,0, 4)
+    return board
 
-def loadTestGame2(game):
+def loadTestGame2():
     width = 6
     height = 6
-    game.board = Board(width,height)
-    game.board.setExitCoord((5,2))
-    game.windowWidth = width * 50
-    game.windowHeight = height * 50
-    game.board.addCar((0,2),2,1, 0, True)
-    game.board.addCar((4,2),3,0, 2)
-    game.board.addCar((3,5),2,1, 4)
+    board = Board(width,height)
+    board.setExitCoord((5,2))
+    windowWidth = width * 50
+    windowHeight = height * 50
+    board.addCar((0,2),2,1, 0, True)
+    board.addCar((4,2),3,0, 2)
+    board.addCar((3,5),2,1, 4)
+    return board
 
-def loadTestGame3(game):
+def loadTestGame3():
     width = 6
     height = 6
-    game.board = Board(width,height)
-    game.board.setExitCoord((5,2))
-    game.windowWidth = width * 50
-    game.windowHeight = height * 50
-    game.board.addCar((0,2),2,1, 0, True)
-    game.board.addCar((5,0),3,0, 2)
-    game.board.addCar((4,5),2,1, 2)
+    board = Board(width,height)
+    board.setExitCoord((5,2))
+    windowWidth = width * 50
+    windowHeight = height * 50
+    board.addCar((0,2),2,1, 0, True)
+    board.addCar((5,0),3,0, 2)
+    board.addCar((4,5),2,1, 2)
+    return board
 
-def loadTestGame4(game):
+def loadTestGame4():
     width = 6
     height = 6
-    game.board = Board(width,height)
-    game.board.setExitCoord((5,2))
-    game.windowWidth = width * 50
-    game.windowHeight = height * 50
-    game.board.addCar((0,2),2,1, 0, True)
-    game.board.addCar((2,0),3,0, 1)
-    game.board.addCar((4,0),2,1, 2)
-    game.board.addCar((0,3),3,1, 3)
-    game.board.addCar((5,3),3,0, 4)
-    # game.playPath = [(5, -1), (4, 1), (4, -1), (5, -1), (5, 1), (4, 1), (3, -1), (3, 1), (5, 1), (5, -1), (3, -1), (5, 1), (4, -1), (3, 1), (5, -1), (4, 1), (3, -1), (5, -1), (4, -1), (5, -1), (5, 1), (3, 1), (4, 1), (5, 1), (4, 1), (3, -1), (5, 1), (5, -1), (5, -1), (3, 1), (5, 1), (5, -1), (3, -1), (5, -1), (5, 1), (4, -1), (3, 1), (3, -1), (3, 1), (3, -1), (3, 1), (5, 1), (4, 1), (3, -1), (3, 1), (3, -1), (5, -1), (5, 1), (3, 1), (4, -1), (4, -1), (5, -1), (4, 1), (4, 1), (3, -1), (5, 1), (5, -1), (5, -1), (5, 1), (5, 1), (3, 1), (3, -1), (4, -1), (5, -1), (5, -1), (5, 1), (4, 1), (5, -1), (4, 1), (4, -1), (5, 1), (4, -1), (4, 1), (5, 1), (4, -1), (5, 1), (5, -1), (4, -1), (3, 1), (4, 1), (5, -1), (4, -1), (3, -1), (3, 1), (4, 1), (5, 1), (4, -1), (4, 1), (5, 1), (4, -1), (5, -1), (3, -1), (3, 1), (5, -1), (3, -1), (4, 1), (4, 1), (5, -1), (5, 1), (5, -1), (5, 1), (3, 1), (3, -1), (4, -1), (4, -1), (5, -1), (5, 1), (4, 1), (4, -1), (4, 1), (3, 1), (4, -1), (3, -1), (5, 1), (5, 1), (5, -1), (5, 1), (3, 1), (4, 1), (4, -1), (3, -1), (5, -1), (4, 1), (5, -1), (3, 1), (4, -1), (5, 1), (5, 1), (4, 1), (4, -1), (4, 1), (4, 1), (5, -1), (3, -1), (3, 1), (5, -1), (5, 1), (4, -1), (5, -1), (4, 1), (5, 1), (4, -1), (5, 1), (4, -1), (4, 1), (4, -1), (4, 1), (4, -1), (3, -1), (4, 1), (3, 1), (4, -1), (5, -1), (5, 1), (4, 1), (5, -1), (5, 1), (5, -1), (4, 1), (5, -1), (3, -1), (5, -1), (4, -1), (4, -1), (5, 1), (3, 1), (3, -1), (3, 1), (4, 1), (4, 1), (3, -1), (5, -1), (5, 1), (4, -1), (4, -1), (3, 1), (3, -1), (3, 1), (3, -1), (3, 1), (3, -1), (4, 1), (5, 1), (4, -1), (4, 1), (5, -1), (4, -1), (5, 1), (4, 1), (4, 1), (5, -1), (3, 1), (5, 1), (3, -1), (3, 1), (4, -1), (5, 1), (4, -1), (3, -1), (4, 1), (5, -1), (5, -1), (5, 1), (5, -1), (3, 1), (5, 1), (5, -1), (4, -1), (3, -1), (3, 1), (3, -1), (4, 1), (5, 1), (4, 1), (3, 1), (5, 1), (5, -1), (5, -1), (4, -1), (4, 1), (3, -1), (4, -1), (3, 1), (3, -1), (4, 1), (3, 1), (3, -1), (5, -1), (4, 1), (2, 1), (3, -1), (3, -1), (2, 1), (3, 1), (2, 1), (2, -1), (2, 1), (1, 1), (3, 1), (3, -1), (1, 1), (3, -1), (3, -1), (3, 1), (1, 1), (2, -1), (3, -1), (3, 1), (3, 1), (3, -1), (3, 1), (3, 1), (2, -1), (2, -1), (4, -1), (5, 1), (4, -1), (4, -1), (5, 1), (5, 1), (5, -1), (5, 1), (5, -1), (5, 1), (1, 1)]
+    board = Board(width,height)
+    board.setExitCoord((5,2))
+    windowWidth = width * 50
+    windowHeight = height * 50
+    board.addCar((0,2),2,1, 0, True)
+    board.addCar((2,0),3,0, 1)
+    board.addCar((4,0),2,1, 2)
+    board.addCar((0,3),3,1, 3)
+    board.addCar((5,3),3,0, 4)
+    return board
+    # playPath = [(5, -1), (4, 1), (4, -1), (5, -1), (5, 1), (4, 1), (3, -1), (3, 1), (5, 1), (5, -1), (3, -1), (5, 1), (4, -1), (3, 1), (5, -1), (4, 1), (3, -1), (5, -1), (4, -1), (5, -1), (5, 1), (3, 1), (4, 1), (5, 1), (4, 1), (3, -1), (5, 1), (5, -1), (5, -1), (3, 1), (5, 1), (5, -1), (3, -1), (5, -1), (5, 1), (4, -1), (3, 1), (3, -1), (3, 1), (3, -1), (3, 1), (5, 1), (4, 1), (3, -1), (3, 1), (3, -1), (5, -1), (5, 1), (3, 1), (4, -1), (4, -1), (5, -1), (4, 1), (4, 1), (3, -1), (5, 1), (5, -1), (5, -1), (5, 1), (5, 1), (3, 1), (3, -1), (4, -1), (5, -1), (5, -1), (5, 1), (4, 1), (5, -1), (4, 1), (4, -1), (5, 1), (4, -1), (4, 1), (5, 1), (4, -1), (5, 1), (5, -1), (4, -1), (3, 1), (4, 1), (5, -1), (4, -1), (3, -1), (3, 1), (4, 1), (5, 1), (4, -1), (4, 1), (5, 1), (4, -1), (5, -1), (3, -1), (3, 1), (5, -1), (3, -1), (4, 1), (4, 1), (5, -1), (5, 1), (5, -1), (5, 1), (3, 1), (3, -1), (4, -1), (4, -1), (5, -1), (5, 1), (4, 1), (4, -1), (4, 1), (3, 1), (4, -1), (3, -1), (5, 1), (5, 1), (5, -1), (5, 1), (3, 1), (4, 1), (4, -1), (3, -1), (5, -1), (4, 1), (5, -1), (3, 1), (4, -1), (5, 1), (5, 1), (4, 1), (4, -1), (4, 1), (4, 1), (5, -1), (3, -1), (3, 1), (5, -1), (5, 1), (4, -1), (5, -1), (4, 1), (5, 1), (4, -1), (5, 1), (4, -1), (4, 1), (4, -1), (4, 1), (4, -1), (3, -1), (4, 1), (3, 1), (4, -1), (5, -1), (5, 1), (4, 1), (5, -1), (5, 1), (5, -1), (4, 1), (5, -1), (3, -1), (5, -1), (4, -1), (4, -1), (5, 1), (3, 1), (3, -1), (3, 1), (4, 1), (4, 1), (3, -1), (5, -1), (5, 1), (4, -1), (4, -1), (3, 1), (3, -1), (3, 1), (3, -1), (3, 1), (3, -1), (4, 1), (5, 1), (4, -1), (4, 1), (5, -1), (4, -1), (5, 1), (4, 1), (4, 1), (5, -1), (3, 1), (5, 1), (3, -1), (3, 1), (4, -1), (5, 1), (4, -1), (3, -1), (4, 1), (5, -1), (5, -1), (5, 1), (5, -1), (3, 1), (5, 1), (5, -1), (4, -1), (3, -1), (3, 1), (3, -1), (4, 1), (5, 1), (4, 1), (3, 1), (5, 1), (5, -1), (5, -1), (4, -1), (4, 1), (3, -1), (4, -1), (3, 1), (3, -1), (4, 1), (3, 1), (3, -1), (5, -1), (4, 1), (2, 1), (3, -1), (3, -1), (2, 1), (3, 1), (2, 1), (2, -1), (2, 1), (1, 1), (3, 1), (3, -1), (1, 1), (3, -1), (3, -1), (3, 1), (1, 1), (2, -1), (3, -1), (3, 1), (3, 1), (3, -1), (3, 1), (3, 1), (2, -1), (2, -1), (4, -1), (5, 1), (4, -1), (4, -1), (5, 1), (5, 1), (5, -1), (5, 1), (5, -1), (5, 1), (1, 1)]
 
-def loadTestGame5(game):
+def loadTestGame5():
     width = 4
     height = 4
-    game.board = Board(width,height)
-    game.board.path = deque()
-    game.board.setExitCoord((3,1))
-    game.windowWidth = width * 50
-    game.windowHeight = height * 50
-    game.board.addCar((0,1),2,1, 0, True)
-    game.board.addCar((3,0),2,0, 4)
-    # game.playPath = [(1, 1), (2, 1), (2, 1), (2, -1), (2, -1), (1, 1), (2, 1), (1, -1), (2, 1), (1, 1)]
-    # game.playPath = [(1, 1), (1, 1), (1, -1), (2, 1), (1, 1), (2, -1), (1, -1), (1, 1), (2, 1), (2, 1), (1, -1), (1, 1), (1, -1), (1, 1)]
-    # game.playPath = game.playPath[::-1]
+    board = Board(width,height)
+    board.path = deque()
+    board.setExitCoord((3,1))
+    windowWidth = width * 50
+    windowHeight = height * 50
+    board.addCar((0,1),2,1, 0, True)
+    board.addCar((3,0),2,0, 4)
+    return board
+    # playPath = [(1, 1), (2, 1), (2, 1), (2, -1), (2, -1), (1, 1), (2, 1), (1, -1), (2, 1), (1, 1)]
+    # playPath = [(1, 1), (1, 1), (1, -1), (2, 1), (1, 1), (2, -1), (1, -1), (1, 1), (2, 1), (2, 1), (1, -1), (1, 1), (1, -1), (1, 1)]
+    # playPath = playPath[::-1]
 
 
 
