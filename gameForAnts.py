@@ -39,6 +39,7 @@ class Game(object):
     def startGame(self):
         print "starting game", self.configuration
 
+        self.startNode = [loadGame(self.configuration).toString()]
 
         threads = []
         for i in range(10):
@@ -75,18 +76,31 @@ class Game(object):
 
         myBoard.setCarsMovable()
 
+        dropPheromone = False
 
         while True:
-            self.randomMove(myBoard)
+            self.randomMove(myBoard, dropPheromone)
 
-            if myBoard.checkForWin():
-                self.winState = True
+            if myBoard.checkForWin() and not dropPheromone:
+                dropPheromone = True
                 self.winNodes.add(myBoard.toString())
                 print "ant", antNumber, "found the food!"
+                # print myBoard.toString()
+                # print self.startNode
+
+
+            if myBoard.toString() in self.startNode and dropPheromone:
+                dropPheromone = False
+                print "ant", antNumber, "is back home!"
                 return
 
 
-    def randomMove(self, myBoard):
+
+    def randomMove(self, myBoard, dropPheromone):
+        # if dropPheromone:
+        #     print ".",
+
+
         movableCars = []
         for car in myBoard.getCars():
             if car.getCanMove():

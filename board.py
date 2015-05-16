@@ -25,6 +25,8 @@ class Board():
     winCarID = 0
     grid = []
 
+    smallSteps = False
+
     def __init__(self, width = 6, height = 6):
         self.width = width
         self.height = height
@@ -289,6 +291,8 @@ class Board():
                         distance = tempCoords[x] - coords[x]
                         if distance:
                             possibleMoves.add((carID, distance))
+                            if self.smallSteps:
+                                break
                     else:
                         break
                     tempCoords[x] += 1
@@ -299,6 +303,8 @@ class Board():
                         distance = tempCoords[x] - coords[x]
                         if distance:
                             possibleMoves.add((carID, distance))
+                            if self.smallSteps:
+                                break
                     else:
                         break
                     tempCoords[x] -= 1
@@ -309,6 +315,8 @@ class Board():
                         distance = tempCoords[y] - coords[y]
                         if distance:
                             possibleMoves.add((carID, distance))
+                            if self.smallSteps:
+                                break
                     else:
                         break
                     tempCoords[y] += 1
@@ -319,6 +327,8 @@ class Board():
                         distance = tempCoords[y] - coords[y]
                         if distance:
                             possibleMoves.add((carID, distance))
+                            if self.smallSteps:
+                                break
                     else:
                         break
                     tempCoords[y] -= 1
@@ -506,6 +516,7 @@ class Board():
             copy.addCar(car.getCoords(), car.getLength(), car.getDirection(), car.getColor(), car.isWinCar)
         copy.setExitCoord(self.getExitCoord())
         copy.path = cp.deepcopy(self.path)
+        copy.smallSteps = self.smallSteps
 
         return copy
 

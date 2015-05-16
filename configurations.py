@@ -25,6 +25,10 @@ def loadGame(num):
         return loadTestGame4()
     elif num == -5:
         return loadTestGame5()
+    elif num == -6:
+        return loadTestGame6()
+    elif num == -7:
+        return loadTestGame7()
     else:
         print 'no configuration'
 
@@ -309,5 +313,31 @@ def loadTestGame5():
     # playPath = [(1, 1), (1, 1), (1, -1), (2, 1), (1, 1), (2, -1), (1, -1), (1, 1), (2, 1), (2, 1), (1, -1), (1, 1), (1, -1), (1, 1)]
     # playPath = playPath[::-1]
 
+def loadTestGame6():
+    width = 6
+    height = 6
+    board = Board(width,height)
+    board.setExitCoord((5,2))
+    windowWidth = width * 50
+    windowHeight = height * 50
+    board.addCar((2,2),2,1, 0, True)
+    board.addCar((4,0),3,0, 1)
+    board.addCar((3,3),2,0, 2)
+    board.addCar((4,4),2,1, 3)
+    return board
 
+def loadTestGame7():
+    width = 6
+    height = 6
+    board = Board(width,height)
+    board.setExitCoord((5,2))
+    windowWidth = width * 50
+    windowHeight = height * 50
+    board.addCar((0,2),2,1, 0, True)
+    board.addCar((0,0),2,0, 1)
+    board.addCar((5,0),3,0, 2)
+    board.addCar((4,3),2,1, 3)
+    board.addCar((2,3),2,0, 4)
+    board.addCar((3,5),3,1, 5)
+    return board
 

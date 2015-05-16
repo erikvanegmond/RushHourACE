@@ -61,8 +61,8 @@ class Game(object):
         parser.add_argument('--alg', type=str, choices =['random', 'breadthfirst', 'astar', 'depthfirst'], default = 'astar',
             help='random, breadthfirst, astar, or depthfirst')
 
-        parser.add_argument('--game', type=int, choices =[1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4, -5], default = '3',
-            help='load a game from 1 to 7, test game form -1, -2 or -3')
+        parser.add_argument('--game', type=int, default = '3',
+            help='load a game from 1 to 7, test game form -1, -2, -3, -4, -5 or -6')
 
         parser.add_argument('-visual', "--visual", action='store_true', default=False,
                     dest='visual',
@@ -88,6 +88,14 @@ class Game(object):
                     dest='drawStateSpace',
                     help='Draw the state space that is explored')
 
+        parser.add_argument('-exploreAll', "--exploreAll", action='store_true', default=False,
+                    dest='exploreAll',
+                    help='Explore the entire statespace until all states are visited')
+
+        parser.add_argument('-onlySmallSteps', "--onlySmallSteps", action='store_true', default=False,
+                    dest='onlySmallSteps',
+                    help='Allow only for moves that are one tile')
+
         args = parser.parse_args()
 
         argdict = vars(args) # converts namespace with all arguments to a dictionary
@@ -100,6 +108,8 @@ class Game(object):
         self.gatherStatistics = argdict.get('gatherStatistics')
         self.storePath = argdict.get('storePath')
         self.drawStateSpace = argdict.get('drawStateSpace')
+        self.exploreAll = argdict.get('exploreAll')
+        self.onlySmallSteps = argdict.get('onlySmallSteps')
 
         self.startGame()
 
@@ -109,6 +119,9 @@ class Game(object):
         if self.drawStateSpace:
             self.stateSpace = nx.Graph()
             self.startNode.append(self.board.toString())
+
+        if self.onlySmallSteps:
+            self.board.smallSteps = True
 
         if len(self.playPath):
             self.solveMethod = "path"
@@ -285,16 +298,13 @@ class Game(object):
 
 
             if self.board.checkForWin():
-                # print "Game Won"
-                # print self.board.path
                 self.winNodes.add(self.board.toString())
 
+                if not self.exploreAll:
+                    self.printStatistics()
 
-                self.printStatistics()
+                    self.winState = True
 
-                self.winState = True
-                # if self.showSolution:
-                #     self.printSolution(self.board.path)
 
         if self.storePath:
             fname = "pathGame%s-%s.csv" %(str(self.configuration), str(self.solveMethod))
