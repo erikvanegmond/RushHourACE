@@ -5,6 +5,12 @@ try:
 except ImportError:
     pass
 
+try:
+    import networkx as nx
+    import matplotlib.pyplot as plt
+except ImportError:
+    pass
+
 import sys
 from board import *
 import random
@@ -44,6 +50,11 @@ class Game(object):
 
     stats = None
 
+    stateSpace = None
+    startNode = []
+    winNodes = set()
+
+
     def __init__(self):
         parser = argparse.ArgumentParser(description='Solve Rush Hour')
 
@@ -73,6 +84,10 @@ class Game(object):
                     dest='storePath',
                     help='Store path in a text file')
 
+        parser.add_argument('-drawStateSpace', "--drawStateSpace", action='store_true', default=False,
+                    dest='drawStateSpace',
+                    help='Draw the state space that is explored')
+
         args = parser.parse_args()
 
         argdict = vars(args) # converts namespace with all arguments to a dictionary
@@ -84,13 +99,17 @@ class Game(object):
         self.onlyStatistics = argdict.get('showEverything')
         self.gatherStatistics = argdict.get('gatherStatistics')
         self.storePath = argdict.get('storePath')
+        self.drawStateSpace = argdict.get('drawStateSpace')
 
         self.startGame()
 
 
     def startGame(self):
-
         self.board = loadGame(self.configuration)
+        if self.drawStateSpace:
+            self.stateSpace = nx.Graph()
+            self.startNode.append(self.board.toString())
+
         if len(self.playPath):
             self.solveMethod = "path"
             # print self.playPath
@@ -222,8 +241,6 @@ class Game(object):
             if mouseClicked:
                 self.visualizeSolution(self.board.path)
 
-
-
     def runWithoutVisual(self):
         if self.gatherStatistics:
             iterationCounter = 0
@@ -270,6 +287,8 @@ class Game(object):
             if self.board.checkForWin():
                 # print "Game Won"
                 # print self.board.path
+                self.winNodes.add(self.board.toString())
+
 
                 self.printStatistics()
 
@@ -282,7 +301,20 @@ class Game(object):
             f = open(fname, 'a')
             f.write(str(len(list(self.board.path)))+", "+str(list(self.board.path))+"\n")
 
+        if self.drawStateSpace:
+            print "drawing the state space"
+            pos=nx.graphviz_layout(self.stateSpace,prog='neato')
+            nx.draw(self.stateSpace,pos=pos,node_size=20)
+            nx.draw_networkx_nodes(self.stateSpace,pos,
+                           nodelist=self.startNode,
+                           node_color='g',
+                           node_size=100)
+            nx.draw_networkx_nodes(self.stateSpace,pos,
+                           nodelist=list(self.winNodes),
+                           node_color='b',
+                           node_size=100)
 
+            plt.show()
 
         if self.solveMethod == "random":
             if self.gatherStatistics:
@@ -300,7 +332,6 @@ class Game(object):
             # print 'old vs new length:', lengthOldPath, 'vs', len(newPath)
 
             # self.printSolution(newPath, True)
-
 
     def visualizeSolution(self, path):
         # print "called function"
@@ -524,6 +555,13 @@ class Game(object):
             else:
                 continue
 
+            if self.drawStateSpace:
+                board1String = self.board.toString()
+                board2String = newBoard.toString()
+                self.stateSpace.add_node(board1String)
+                self.stateSpace.add_node(board2String)
+                self.stateSpace.add_edge(board1String, board2String)
+
     def aStarMove(self):
 
         if self.priorityQueue.empty():
@@ -550,6 +588,13 @@ class Game(object):
                 # print self.moveCounter
             else:
                 continue
+
+            if self.drawStateSpace:
+                board1String = self.board.toString()
+                board2String = newBoard.toString()
+                self.stateSpace.add_node(board1String)
+                self.stateSpace.add_node(board2String)
+                self.stateSpace.add_edge(board1String, board2String)
 
             if newBoard.checkForWin():
                 self.board = newBoard

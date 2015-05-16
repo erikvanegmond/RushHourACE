@@ -16,6 +16,10 @@ class Game(object):
 
     winState = False
 
+    startNode = []
+
+    winNodes = set()
+
     """docstring for Game"""
     def __init__(self):
         parser = argparse.ArgumentParser(description='Solve Rush Hour')
@@ -48,8 +52,22 @@ class Game(object):
         print "Waiting done"
 
         # nx.draw(self.stateSpace)
+        myBoard = loadGame(self.configuration).toString()
         pos=nx.graphviz_layout(self.stateSpace,prog='neato')
-        nx.draw(self.stateSpace,pos=pos)
+        nx.draw(self.stateSpace,pos=pos,node_size=20)
+        nx.draw_networkx_nodes(self.stateSpace,pos,
+                       nodelist=[myBoard],
+                       node_color='g',
+                       node_size=100)
+        nx.draw_networkx_nodes(self.stateSpace,pos,
+                       nodelist=list(self.winNodes),
+                       node_color='b',
+                       node_size=100)
+
+        # A = nx.to_agraph(self.stateSpace)
+        # A.layout(prog='neato', color='red')
+        # A.draw('color.png')
+
         plt.show()
 
     def ant(self, antNumber):
@@ -63,6 +81,7 @@ class Game(object):
 
             if myBoard.checkForWin():
                 self.winState = True
+                self.winNodes.add(myBoard.toString())
                 print "ant", antNumber, "found the food!"
                 return
 
