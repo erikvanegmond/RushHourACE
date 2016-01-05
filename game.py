@@ -285,8 +285,8 @@ class Game(object):
                             shortestPath = l
                         if l>longestPath:
                             longestPath = l
-                    self.stats.log([iterationCounter, time.time()-self.startTime, self.moveCounter, self.priorityQueue.qsize(), len(self.visitedDict), shortestPath, longestPath])
-
+                    timePassed = time.time() - self.startTime
+                    self.stats.log([iterationCounter, timePassed, self.moveCounter, self.priorityQueue.qsize(), len(self.visitedDict), shortestPath, longestPath])
                 elif self.solveMethod =="breadthfirst":
                     for board in list(self.statesToVisit.queue):
                         l = len(board.path)

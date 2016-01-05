@@ -7,9 +7,14 @@ class StatisticsLogger(object):
     def __init__(self, game, alg, statistics):
         fname = "statisticsGame%s-%s.csv" %(str(game), str(alg))
         self.statisticsFile = open(fname, 'w')
-        self.statisticsFile.write(",".join(statistics)+"\n")
+        for element in statistics:
+            self.statisticsFile.write(element+";")
+        self.statisticsFile.write("\n")
 
 
     def log(self, statistics):
         statistics = map(str, statistics)
-        self.statisticsFile.write(",".join(statistics)+"\n")
+        for element in statistics:
+            self.statisticsFile.write(element+";")
+        self.statisticsFile.write("\n")
+
